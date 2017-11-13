@@ -1,0 +1,63 @@
+{
+  "name": "yuncms/yuncms-user",
+  "description": "Flexible user registration and authentication module for YUNCMS",
+  "keywords": [
+    "yii2",
+    "yii2-user",
+    "user management"
+  ],
+  "type": "yii2-extension",
+  "license": "MIT",
+  "require": {
+    "yiisoft/yii2": "~2.0.6",
+    "yiisoft/yii2-jui": "~2.0",
+    "yiisoft/yii2-swiftmailer": "~2.0",
+    "yiisoft/yii2-queue": "~2.0",
+    "yiisoft/yii2-bootstrap": "~2.0",
+    "yiisoft/yii2-imagine": "~2.1",
+    "xutl/yii2-cropper-asset": "~1.0",
+    "xutl/yii2-authclient": "~1.0",
+    "xutl/yii2-fontawesome-asset": "~2.0",
+    "yuncms/yuncms-core": "~2.0"
+  },
+  "require-dev": {
+    "codeception/base": "^2.2.3",
+    "codeception/verify": "^0.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "yuncms\\user\\": ""
+    }
+  },
+  "extra": {
+    "yuncms": {
+      "name": "user",
+      "i18n": {
+        "class": "yii\\i18n\\PhpMessageSource",
+        "sourceLanguage": "en-US",
+        "basePath": "@yuncms/user/messages"
+      },
+      "migrationNamespace": "yuncms\\user\\migrations",
+      "backend": {
+        "class": "yuncms\\user\\backend\\Module"
+      },
+      "frontend": {
+        "class": "yuncms\\user\\frontend\\Module"
+      }
+    },
+    "bootstrap": "yuncms\\user\\Bootstrap",
+    "branch-alias": {
+      "dev-master": "2.0.x-dev"
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    },
+    {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  ]
+}
