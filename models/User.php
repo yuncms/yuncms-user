@@ -44,6 +44,20 @@ use yuncms\tag\models\Tag;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+    /**
+     * @var string Default username regexp
+     */
+    public static $usernameRegexp = '/^[-a-zA-Z0-9_]+$/u';
+
+    /**
+     * @var string Default nickname regexp
+     */
+    public static $nicknameRegexp = '/^[-a-zA-Z0-9_\x{4e00}-\x{9fa5}\.@]+$/u';
+
+    /**
+     * @var string Default mobile regexp
+     */
+    public static $mobileRegexp = '/^13[\d]{9}$|^15[\d]{9}$|^17[\d]{9}$|^18[\d]{9}$/';
 
     //场景定义
     const SCENARIO_CREATE = 'create';//创建
@@ -185,6 +199,51 @@ class User extends ActiveRecord implements IdentityInterface
     public static function find()
     {
         return new UserQuery(get_called_class());
+    }
+
+    /**
+     * 通过登陆邮箱或手机号获取用户
+     * @param string $emailOrMobile
+     * @return User|null
+     */
+    public static function findByEmailOrMobile($emailOrMobile)
+    {
+        if (filter_var($emailOrMobile, FILTER_VALIDATE_EMAIL)) {
+            return static::findByEmail($emailOrMobile);
+        } else if (preg_match(self::$mobileRegexp, $emailOrMobile)) {
+            return static::findByMobile($emailOrMobile);
+        }
+        return null;
+    }
+
+    /**
+     * 通过邮箱获取用户
+     * @param string $email 邮箱
+     * @return null|static
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
+
+    /**
+     * 通过手机号获取用户
+     * @param string $mobile
+     * @return static
+     */
+    public static function findByMobile($mobile)
+    {
+        return static::findOne(['mobile' => $mobile]);
+    }
+
+    /**
+     * 通过用户名获取用户
+     * @param string $username 用户标识
+     * @return null|static
+     */
+    public static function findModelByUsername($username)
+    {
+        return static::findOne(['username' => $username]);
     }
 
     /**
