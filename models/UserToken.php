@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\helpers\Url;
 use yuncms\user\UserTrait;
 
 /**
@@ -41,6 +42,14 @@ class UserToken extends ActiveRecord
     public static function tableName()
     {
         return '{{%user_token}}';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function primaryKey()
+    {
+        return ['user_id', 'code', 'type'];
     }
 
     /**
@@ -111,6 +120,33 @@ class UserToken extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        switch ($this->type) {
+            case self::TYPE_CONFIRMATION:
+                $route = '/user/registration/confirm';
+                break;
+            case self::TYPE_RECOVERY:
+                $route = '/user/recovery/reset';
+                break;
+            case self::TYPE_CONFIRM_NEW_EMAIL:
+            case self::TYPE_CONFIRM_OLD_EMAIL:
+                $route = '/user/setting/confirm';
+                break;
+            case self::TYPE_CONFIRM_NEW_MOBILE:
+            case self::TYPE_CONFIRM_OLD_MOBILE:
+                $route = '/user/setting/mobile';
+                break;
+            default:
+                throw new \RuntimeException();
+        }
+
+        return Url::to([$route, 'id' => $this->user_id, 'code' => $this->code], true);
     }
 
     /**
