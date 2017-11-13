@@ -64,6 +64,7 @@ class User extends ActiveRecord implements IdentityInterface
     //场景定义
     const SCENARIO_EMAIL_REGISTER = 'email_create';//创建
     const SCENARIO_MOBILE_REGISTER = 'mobile_create';//更新
+    const SCENARIO_SETTINGS = 'settings';//更新
 
     //头像
     const AVATAR_BIG = 'big';
@@ -135,7 +136,7 @@ class User extends ActiveRecord implements IdentityInterface
         return ArrayHelper::merge($scenarios, [
             static::SCENARIO_EMAIL_REGISTER => ['nickname', 'email', 'password'],
             static::SCENARIO_MOBILE_REGISTER => ['mobile', 'password'],
-            //static::SCENARIO_UPDATE => [],
+            static::SCENARIO_SETTINGS => ['username', 'email', 'password'],
         ]);
     }
 

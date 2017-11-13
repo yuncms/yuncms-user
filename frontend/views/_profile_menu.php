@@ -24,18 +24,14 @@ $items = [
     [
         'label' => Yii::t('user', 'Authentication'),
         'url' => ['/authentication/authentication/index'],
-        'icon' => 'glyphicon glyphicon-education'
+        'icon' => 'glyphicon glyphicon-education',
+        'visible' => Yii::$app->hasModule('authentication')
     ],
     [
         'label' => Yii::t('user', 'My Streams'),
         'url' => ['/live/manage/index'],
         'icon' => 'fa fa-video-camera',
         'visible' => Yii::$app->hasModule('live')
-    ],
-    [
-        'label' => Yii::t('user', 'Education'),
-        'url' => ['/user/education/index'],
-        'icon' => 'fa fa-graduation-cap'
     ],
     [
         'label' => Yii::t('user', 'My Funds'),
@@ -46,18 +42,14 @@ $items = [
     [
         'label' => Yii::t('user', 'My Coin'),
         'url' => ['/coin/coin/index'],
-        'icon' => 'fa fa-gift'
+        'icon' => 'fa fa-gift',
+        'visible' => Yii::$app->hasModule('coin')
     ],
     [
         'label' => Yii::t('user', 'My Credit'),
         'url' => ['/credit/credit/index'],
         'icon' => 'fa fa-credit-card',
         'visible' => Yii::$app->hasModule('credit')
-    ],
-    [
-        'label' => Yii::t('user', 'Careers'),
-        'url' => ['/user/career/index'],
-        'icon' => 'glyphicon glyphicon-list-alt'
     ],
     [
         'label' => Yii::t('user', 'OAuth Apps'),
