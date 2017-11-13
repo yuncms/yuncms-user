@@ -8,9 +8,12 @@
 namespace yuncms\user;
 
 use Yii;
+use yii\web\User;
 use yii\web\GroupUrlRule;
 use yii\i18n\PhpMessageSource;
 use yii\base\BootstrapInterface;
+use yii\console\Application as ConsoleApplication;
+use yii\web\Application as WebApplication;
 use yuncms\user\jobs\LastVisitJob;
 
 /**
@@ -26,7 +29,7 @@ class Bootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-        if ($app instanceof \yii\console\Application) {
+        if ($app instanceof ConsoleApplication) {
             $app->controllerMap['user'] = [
                 'class' => 'yuncms\user\console\UserController',
             ];
@@ -36,7 +39,7 @@ class Bootstrap implements BootstrapInterface
                     'enableAutoLogin' => true,
                     'loginUrl' => ['/user/security/login'],
                     'identityClass' => 'yuncms\user\models\User',
-                    'identityCookie' => ['name' => '_identity_frontend', 'httpOnly' => true],
+                    'identityCookie' => ['name' => '_identity', 'httpOnly' => true],
                     'idParam' => '_user',
                 ]);
                 $configUrlRule = [
@@ -50,7 +53,7 @@ class Bootstrap implements BootstrapInterface
 
                 //监听用户登录事件
                 /** @var \yii\web\UserEvent $event */
-                $app->user->on(\yii\web\User::EVENT_AFTER_LOGIN, function ($event) {
+                $app->user->on(User::EVENT_AFTER_LOGIN, function ($event) {
                     //记录最后登录时间记录最后登录IP记录登录次数
                     $event->identity->resetLoginData();
                 });
@@ -63,7 +66,7 @@ class Bootstrap implements BootstrapInterface
             }
             //监听用户活动时间
             /** @var \yii\web\UserEvent $event */
-            $app->on(\yii\web\Application::EVENT_AFTER_REQUEST, function ($event) use ($app) {
+            $app->on(WebApplication::EVENT_AFTER_REQUEST, function ($event) use ($app) {
                 if (!$app->user->isGuest && Yii::$app->has('queue')) {
                     //记录最后活动时间
                     Yii::$app->queue->push(new LastVisitJob(['user_id' => $app->user->identity->id, 'time' => time()]));
