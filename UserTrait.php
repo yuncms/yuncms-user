@@ -12,6 +12,8 @@ use yii\helpers\FileHelper;
 
 /**
  * Class UserTrait
+ *
+ * @property Module $module
  * @package yuncms\user
  */
 trait UserTrait
@@ -71,10 +73,30 @@ trait UserTrait
     }
 
     /**
-     * @return Module
+     * @return null|\yii\base\Module
      */
     public function getModule()
     {
         return Yii::$app->getModule('user');
+    }
+
+    /**
+     * 给用户发送邮件
+     * @param string $to 收件箱
+     * @param string $subject 标题
+     * @param string $view 视图
+     * @param array $params 参数
+     * @return boolean
+     */
+    public function sendMessage($to, $subject, $view, $params = [])
+    {
+        if (empty($to)) {
+            return false;
+        }
+        $message = Yii::$app->mailer->compose([
+            'html' => '@yuncms/user/mail/' . $view,
+            'text' => '@yuncms/user/mail/text/' . $view
+        ], $params)->setTo($to)->setSubject($subject);
+        return $message->send();
     }
 }

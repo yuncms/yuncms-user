@@ -567,7 +567,7 @@ class User extends ActiveRecord implements IdentityInterface
             /** @var UserToken $token */
             $token = new UserToken(['type' => UserToken::TYPE_CONFIRMATION]);
             $token->link('user', $this);
-            //$this->module->sendMessage($this->email, Yii::t('user', 'Welcome to {0}', Yii::$app->name), 'welcome', ['user' => $this, 'token' => isset($token) ? $token : null, 'module' => $this->module, 'showPassword' => false]);
+            $this->sendMessage($this->email, Yii::t('user', 'Welcome to {0}', Yii::$app->name), 'welcome', ['user' => $this, 'token' => isset($token) ? $token : null, 'module' => $this->module, 'showPassword' => false]);
         } else {
             Yii::$app->user->login($this, $this->getSetting('rememberFor'));
         }
