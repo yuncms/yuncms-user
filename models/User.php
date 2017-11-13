@@ -68,6 +68,7 @@ class User extends ActiveRecord implements IdentityInterface
     const SCENARIO_MOBILE_REGISTER = 'mobile_create';//更新
     const SCENARIO_SETTINGS = 'settings';//更新
     const SCENARIO_CONNECT = 'connect';//账户链接
+    const SCENARIO_PASSWORD = 'password';
 
     // following constants are used on secured email changing process
     const OLD_EMAIL_CONFIRMED = 0b1;
@@ -146,7 +147,8 @@ class User extends ActiveRecord implements IdentityInterface
             static::SCENARIO_EMAIL_REGISTER => ['nickname', 'email', 'password'],
             static::SCENARIO_MOBILE_REGISTER => ['mobile', 'password'],
             static::SCENARIO_SETTINGS => ['username', 'email', 'password'],
-            static::SCENARIO_CONNECT => ['nickname', 'email', 'password'],//链接账户
+            static::SCENARIO_CONNECT => ['nickname', 'email', 'password'],//链接账户密码可以为空邮箱可以为空
+            static::SCENARIO_PASSWORD => ['password'],//只修改密码
         ]);
     }
 
