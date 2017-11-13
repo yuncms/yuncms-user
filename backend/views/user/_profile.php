@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /**
  * @var yii\web\View $this
  * @var yuncms\user\models\User $user
- * @var yuncms\user\models\Profile $profile
+ * @var yuncms\user\models\UserProfile $profile
  */
 
 ?>

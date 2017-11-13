@@ -1,11 +1,11 @@
 <?php
 /**
  * @var yii\web\View
- * @var yuncms\user\models\User
+ * @var yuncms\user\models\User $model
  */
 ?>
 
-<?php $this->beginContent('@vendor/yuncms/yii2-user/backend/views/user/update.php', ['model' => $model]) ?>
+<?php $this->beginContent('@yuncms/user/backend/views/user/update.php', ['model' => $model]) ?>
 
 <table class="table">
     <tr>

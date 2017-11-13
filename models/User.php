@@ -62,6 +62,8 @@ class User extends ActiveRecord implements IdentityInterface
     const AFTER_REGISTER = 'afterRegister';
 
     //场景定义
+    const SCENARIO_CREATE = 'create';//后台或控制台创建用户
+    const SCENARIO_UPDATE = 'update';//后台或控制台修改用户
     const SCENARIO_EMAIL_REGISTER = 'email_create';//创建
     const SCENARIO_MOBILE_REGISTER = 'mobile_create';//更新
     const SCENARIO_SETTINGS = 'settings';//更新
@@ -138,6 +140,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $scenarios = parent::scenarios();
         return ArrayHelper::merge($scenarios, [
+            static::SCENARIO_CREATE => ['nickname', 'email', 'password'],
+            static::SCENARIO_UPDATE => ['nickname', 'email', 'password'],
             static::SCENARIO_EMAIL_REGISTER => ['nickname', 'email', 'password'],
             static::SCENARIO_MOBILE_REGISTER => ['mobile', 'password'],
             static::SCENARIO_SETTINGS => ['username', 'email', 'password'],
@@ -225,7 +229,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserExtra()
+    public function getExtra()
     {
         return $this->hasOne(UserExtra::className(), ['user_id' => 'id']);
     }
@@ -233,7 +237,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserLoginHistories()
+    public function getLoginHistories()
     {
         return $this->hasMany(UserLoginHistory::className(), ['user_id' => 'id']);
     }
@@ -241,7 +245,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserProfile()
+    public function getProfile()
     {
         return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
     }
@@ -250,7 +254,7 @@ class User extends ActiveRecord implements IdentityInterface
      * 返回所有已经连接的社交媒体账户
      * @return UserSocialAccount[] Connected accounts ($provider => $account)
      */
-    public function getUserSocialAccounts()
+    public function getSocialAccounts()
     {
         $connected = [];
         /** @var UserSocialAccount[] $accounts */
@@ -276,7 +280,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserTokens()
+    public function getTokens()
     {
         return $this->hasMany(UserToken::className(), ['user_id' => 'id']);
     }
@@ -331,6 +335,24 @@ class User extends ActiveRecord implements IdentityInterface
     public function setExtra($extra)
     {
         $this->_extra = $extra;
+    }
+
+    /**
+     * 设置Email已经验证
+     * @return bool
+     */
+    public function setEmailConfirm()
+    {
+        return (bool)$this->updateAttributes(['email_confirmed_at' => time()]);
+    }
+
+    /**
+     * 设置手机号已经验证
+     * @return bool
+     */
+    public function setMobileConfirm()
+    {
+        return (bool)$this->updateAttributes(['mobile_confirmed_at' => time()]);
     }
 
     /**
@@ -621,6 +643,26 @@ class User extends ActiveRecord implements IdentityInterface
             Yii::$app->user->login($this, $this->getSetting('rememberFor'));
         }
         $this->trigger(self::AFTER_REGISTER);
+        return true;
+    }
+
+    /**
+     * 创建新用户帐户。 如果用户不提供密码，则会生成密码。
+     *
+     * @return boolean
+     */
+    public function create()
+    {
+        if ($this->getIsNewRecord() == false) {
+            throw new \RuntimeException('Calling "' . __CLASS__ . '::' . __METHOD__ . '" on existing user');
+        }
+        $this->password = $this->password == null ? PasswordHelper::generate(8) : $this->password;
+        $this->trigger(self::BEFORE_CREATE);
+        if (!$this->save()) {
+            return false;
+        }
+        $this->sendMessage($this->email, Yii::t('user', 'Welcome to {0}', Yii::$app->name), 'welcome', ['user' => $this, 'token' => null, 'module' => $this->module, 'showPassword' => true]);
+        $this->trigger(self::AFTER_CREATE);
         return true;
     }
 

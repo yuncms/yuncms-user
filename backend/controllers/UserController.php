@@ -13,12 +13,15 @@ use yii\web\Response;
 use yii\web\Controller;
 use yii\widgets\ActiveForm;
 use yii\filters\VerbFilter;
-use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yuncms\user\models\User;
-use yuncms\user\models\Profile;
+use yuncms\user\models\UserProfile;
 use yuncms\user\backend\models\UserSearch;
 
+/**
+ * Class UserController
+ * @package yuncms\user\backend\controllers
+ */
 class UserController extends Controller
 {
     /** @inheritdoc */
@@ -77,7 +80,7 @@ class UserController extends Controller
         /** @var User $model */
         $model = Yii::createObject([
             'class' => User::className(),
-            'scenario' => 'create',
+            'scenario' => User::SCENARIO_CREATE,
         ]);
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -103,7 +106,7 @@ class UserController extends Controller
     {
         Url::remember('', 'actions-redirect');
         $model = $this->findModel($id);
-        $model->scenario = 'update';
+        $model->scenario = User::SCENARIO_UPDATE;
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
@@ -130,7 +133,7 @@ class UserController extends Controller
         $model = $this->findModel($id);
         $profile = $model->profile;
         if ($profile == null) {
-            $profile = Yii::createObject(Profile::className());
+            $profile = Yii::createObject(UserProfile::className());
             $profile->link('user', $model);
         }
         if (Yii::$app->request->isAjax && $profile->load(Yii::$app->request->post())) {
@@ -166,47 +169,6 @@ class UserController extends Controller
     }
 
     /**
-     * Shows education about user.
-     *
-     * @param int $id
-     *
-     * @return string
-     */
-    public function actionEducation($id)
-    {
-        Url::remember('', 'actions-redirect');
-        $model = $this->findModel($id);
-        $dataProvider = new ActiveDataProvider([
-            'query' => $model->getEducations(),
-        ]);
-        return $this->render('_education', [
-            'model' => $model,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Shows career about user.
-     *
-     * @param int $id
-     *
-     * @return string
-     */
-    public function actionCareer($id)
-    {
-        Url::remember('', 'actions-redirect');
-        $model = $this->findModel($id);
-        $dataProvider = new ActiveDataProvider([
-            'query' => $model->getCareers(),
-        ]);
-        return $this->render('_career', [
-            'model' => $model,
-            'dataProvider' => $dataProvider,
-        ]);
-
-    }
-
-    /**
      * Confirms the User.
      *
      * @param int $id
@@ -216,7 +178,7 @@ class UserController extends Controller
     public function actionConfirm($id)
     {
         $model = $this->findModel($id);
-        $model->confirm();
+        $model->setEmailConfirm();
         Yii::$app->getSession()->setFlash('success', Yii::t('user', 'User has been confirmed'));
         return $this->redirect(Url::previous('actions-redirect'));
     }

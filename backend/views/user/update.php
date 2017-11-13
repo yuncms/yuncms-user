@@ -1,6 +1,6 @@
 <?php
+
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
 use yii\web\View;
 use yuncms\user\models\User;
 use xutl\inspinia\Box;
@@ -43,8 +43,6 @@ if (!isset($this->params['noPadding'])) {
                         ['label' => Yii::t('user', 'Account details'), 'url' => ['/user/user/update', 'id' => $model->id]],
                         ['label' => Yii::t('user', 'Profile details'), 'url' => ['/user/user/update-profile', 'id' => $model->id]],
                         ['label' => Yii::t('user', 'Information'), 'url' => ['/user/user/view', 'id' => $model->id]],
-                        ['label' => Yii::t('user', 'Education'), 'url' => ['/user/user/education', 'id' => $model->id]],
-                        ['label' => Yii::t('user', 'Career'), 'url' => ['/user/user/career', 'id' => $model->id]],
                         [
                             'label' => Yii::t('user', 'Email Confirm'),
                             'url' => ['/user/user/confirm', 'id' => $model->id],
