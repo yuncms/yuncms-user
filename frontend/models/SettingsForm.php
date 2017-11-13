@@ -180,7 +180,7 @@ class SettingsForm extends Model
         /** @var UserToken $token */
         $token = new UserToken(['user_id' => $this->user->id, 'type' => UserToken::TYPE_CONFIRM_NEW_EMAIL]);
         $token->save(false);
-        $this->sendMessage($this->user->unconfirmed_email,Yii::t('user', 'Confirm email change on {0}', Yii::$app->name),'reconfirmation',['user' => $this->user, 'token' => $token]);
+        $this->sendMessage($this->user->unconfirmed_email, Yii::t('user', 'Confirm email change on {0}', Yii::$app->name), 'reconfirmation', ['user' => $this->user, 'token' => $token]);
         Yii::$app->session->setFlash('info', Yii::t('user', 'A confirmation message has been sent to your new email address'));
     }
 
@@ -195,7 +195,7 @@ class SettingsForm extends Model
         /** @var UserToken $token */
         $token = new UserToken(['user_id' => $this->user->id, 'type' => UserToken::TYPE_CONFIRM_OLD_EMAIL]);
         $token->save(false);
-        $this->sendMessage($this->user->email,Yii::t('user', 'Confirm email change on {0}', Yii::$app->name),'reconfirmation',['user' => $this->user, 'token' => $token]);
+        $this->sendMessage($this->user->email, Yii::t('user', 'Confirm email change on {0}', Yii::$app->name), 'reconfirmation', ['user' => $this->user, 'token' => $token]);
         // unset flags if they exist
         $this->user->flags &= ~User::NEW_EMAIL_CONFIRMED;
         $this->user->flags &= ~User::OLD_EMAIL_CONFIRMED;

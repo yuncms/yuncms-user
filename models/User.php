@@ -66,6 +66,10 @@ class User extends ActiveRecord implements IdentityInterface
     const SCENARIO_MOBILE_REGISTER = 'mobile_create';//更新
     const SCENARIO_SETTINGS = 'settings';//更新
 
+    // following constants are used on secured email changing process
+    const OLD_EMAIL_CONFIRMED = 0b1;
+    const NEW_EMAIL_CONFIRMED = 0b10;
+
     //头像
     const AVATAR_BIG = 'big';
     const AVATAR_MIDDLE = 'middle';
