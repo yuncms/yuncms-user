@@ -617,10 +617,12 @@ class User extends ActiveRecord implements IdentityInterface
         ]])->one();
         if (empty($this->unconfirmed_email) || $token === null || $token->isExpired) {
             Yii::$app->session->setFlash('danger', Yii::t('user', 'Your confirmation token is invalid or expired'));
+            return false;
         } else {
             $token->delete();
             if (empty($this->unconfirmed_email)) {
                 Yii::$app->session->setFlash('danger', Yii::t('user', 'An error occurred processing your request'));
+                return false;
             } elseif (static::find()->where(['email' => $this->unconfirmed_email])->exists() == false) {
                 if ($this->getSetting('emailChangeStrategy') == Settings::STRATEGY_SECURE) {
                     switch ($token->type) {
@@ -640,7 +642,9 @@ class User extends ActiveRecord implements IdentityInterface
                     Yii::$app->session->setFlash('success', Yii::t('user', 'Your email address has been changed'));
                 }
                 $this->save(false);
+                return true;
             }
+            return false;
         }
     }
 
