@@ -3,6 +3,7 @@
 namespace yuncms\user\models;
 
 use yii\db\ActiveQuery;
+use yuncms\user\clients\ClientInterface;
 
 /**
  * This is the ActiveQuery class for [[UserSocialAccount]].
@@ -37,5 +38,45 @@ class UserSocialAccountQuery extends ActiveQuery
     public function one($db = null)
     {
         return parent::one($db);
+    }
+
+    /**
+     * Finds an account by code.
+     * @param string $code
+     * @return UserSocialAccountQuery
+     */
+    public function byCode($code)
+    {
+        return $this->andWhere(['code' => md5($code)]);
+    }
+
+    /**
+     * Finds an account by id.
+     * @param integer $id
+     * @return UserSocialAccountQuery
+     */
+    public function byId($id)
+    {
+        return $this->andWhere(['id' => $id]);
+    }
+
+    /**
+     * Finds an account by user_id.
+     * @param integer $userId
+     * @return UserSocialAccountQuery
+     */
+    public function byUser($userId)
+    {
+        return $this->andWhere(['user_id' => $userId]);
+    }
+
+    /**
+     * Finds an account by client.
+     * @param ClientInterface $client
+     * @return UserSocialAccountQuery
+     */
+    public function byClient(ClientInterface $client)
+    {
+        return $this->andWhere(['provider' => $client->getId(),'client_id' => $client->getUserAttributes()['id']]);
     }
 }

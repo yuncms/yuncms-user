@@ -6,6 +6,8 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\Json;
+use yii\helpers\Url;
+use yuncms\user\clients\ClientInterface;
 
 /**
  * This is the model class for table "{{%user_social_account}}".
@@ -57,26 +59,6 @@ class UserSocialAccount extends ActiveRecord
         return $behaviors;
     }
 
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['user_id', 'created_at'], 'integer'],
-            [['provider', 'client_id', 'created_at'], 'required'],
-            [['data'], 'string'],
-            [['username', 'email'], 'string', 'max' => 255],
-            [['provider'], 'string', 'max' => 50],
-            [['client_id'], 'string', 'max' => 100],
-            [['code'], 'string', 'max' => 32],
-            [['provider', 'client_id'], 'unique', 'targetAttribute' => ['provider', 'client_id']],
-            [['code'], 'unique'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-        ];
-    }
-
     /**
      * @inheritdoc
      */
@@ -111,6 +93,18 @@ class UserSocialAccount extends ActiveRecord
         return $this->user_id != null;
     }
 
+    /**
+     * Returns connect url.
+     * @return string
+     */
+    public function getConnectUrl()
+    {
+        $code = Yii::$app->security->generateRandomString();
+        $this->updateAttributes(['code' => md5($code)]);
+
+        return Url::to(['/user/registration/connect', 'code' => $code]);
+    }
+
     public function connect(User $user)
     {
         return $this->updateAttributes(['username' => null, 'email' => null, 'code' => null, 'user_id' => $user->id]);
@@ -125,6 +119,105 @@ class UserSocialAccount extends ActiveRecord
             $this->_data = Json::decode($this->data);
         }
         return $this->_data;
+    }
+
+    public static function create(ClientInterface $client)
+    {
+        /** @var UserSocialAccount $account */
+        $account = Yii::createObject([
+            'class' => static::className(),
+            'provider' => $client->getId(),
+            'client_id' => $client->getUserAttributes()['id'],
+            'data' => json_encode($client->getUserAttributes())
+        ]);
+
+        if ($client instanceof ClientInterface) {
+            $account->setAttributes(['username' => $client->getUsername(), 'email' => $client->getEmail()], false);
+        }
+
+        if (($user = static::fetchUser($account)) instanceof User) {
+            $account->user_id = $user->id;
+        }
+
+        $account->save(false);
+
+        return $account;
+    }
+
+
+    /**
+     * Tries to find an account and then connect that account with current user.
+     *
+     * @param ClientInterface $client
+     */
+    public static function connectWithUser(ClientInterface $client)
+    {
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash('danger', Yii::t('user', 'Something went wrong'));
+            return;
+        }
+
+        $account = static::fetchAccount($client);
+
+        if ($account->user === null) {
+            $account->link('user', Yii::$app->user->identity);
+            Yii::$app->session->setFlash('success', Yii::t('user', 'Your account has been connected'));
+        } else {
+            Yii::$app->session->setFlash('danger', Yii::t('user', 'This account has already been connected to another user'));
+        }
+    }
+
+    /**
+     * Tries to find account, otherwise creates new account.
+     *
+     * @param ClientInterface $client
+     *
+     * @return UserSocialAccount
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected static function fetchAccount(ClientInterface $client)
+    {
+        $account = UserSocialAccount::find()->byClient($client)->one();
+        if (null === $account) {
+            $account = Yii::createObject(['class' => static::className(), 'provider' => $client->getId(), 'client_id' => $client->getUserAttributes()['id'], 'data' => json_encode($client->getUserAttributes())]);
+            $account->save(false);
+        }
+
+        return $account;
+    }
+
+    /**
+     * Tries to find user or create a new one.
+     *
+     * @param UserSocialAccount $account
+     *
+     * @return User|boolean False when can't create user.
+     */
+    protected static function fetchUser(UserSocialAccount $account)
+    {
+        $user = User::findByEmail($account->email);
+
+        if (null !== $user) {
+            return $user;
+        }
+
+        /** @var \yuncms\user\models\User $user */
+        $user = Yii::createObject([
+            'class' => User::className(),
+            'scenario' => User::SCENARIO_CONNECT,
+            'nickname' => $account->username,
+            'email' => $account->email
+        ]);
+
+        if (!$user->validate(['email'])) {
+            $account->email = null;
+        }
+
+        if (!$user->validate(['nickname'])) {
+            $account->username = null;
+        }
+
+        return $user->create() ? $user : false;
     }
 
     /**

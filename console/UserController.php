@@ -29,7 +29,7 @@ class UserController extends Controller
      */
     public function actionCreate($email, $nickname, $password = null)
     {
-        $user = new User(['scenario' => 'create', 'email' => $email, 'nickname' => $nickname, 'password' => $password]);
+        $user = new User(['scenario' => User::SCENARIO_CREATE, 'email' => $email, 'nickname' => $nickname, 'password' => $password]);
         if ($user->create()) {
             $this->stdout(Yii::t('user', 'User has been created') . "!\n", Console::FG_GREEN);
         } else {

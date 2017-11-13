@@ -67,6 +67,7 @@ class User extends ActiveRecord implements IdentityInterface
     const SCENARIO_EMAIL_REGISTER = 'email_create';//创建
     const SCENARIO_MOBILE_REGISTER = 'mobile_create';//更新
     const SCENARIO_SETTINGS = 'settings';//更新
+    const SCENARIO_CONNECT = 'connect';//账户链接
 
     // following constants are used on secured email changing process
     const OLD_EMAIL_CONFIRMED = 0b1;
@@ -145,6 +146,7 @@ class User extends ActiveRecord implements IdentityInterface
             static::SCENARIO_EMAIL_REGISTER => ['nickname', 'email', 'password'],
             static::SCENARIO_MOBILE_REGISTER => ['mobile', 'password'],
             static::SCENARIO_SETTINGS => ['username', 'email', 'password'],
+            static::SCENARIO_CONNECT => ['nickname'],//链接账户
         ]);
     }
 
@@ -162,7 +164,7 @@ class User extends ActiveRecord implements IdentityInterface
             'usernameTrim' => ['username', 'trim'],
 
             // nickname rules
-            'nicknameRequired' => ['nickname', 'required', 'on' => [self::SCENARIO_EMAIL_REGISTER]],
+            'nicknameRequired' => ['nickname', 'required', 'on' => [self::SCENARIO_EMAIL_REGISTER, self::SCENARIO_CONNECT]],
             'nicknameMatch' => ['nickname', 'match', 'pattern' => static::$nicknameRegexp],
             'nicknameLength' => ['nickname', 'string', 'min' => 3, 'max' => 255],
             'nicknameUnique' => ['nickname', 'unique', 'message' => Yii::t('user', 'This nickname has already been taken')],
