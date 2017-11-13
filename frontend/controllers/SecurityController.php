@@ -94,13 +94,7 @@ class SecurityController extends Controller
         if ($model->load(Yii::$app->getRequest()->post()) && $model->login()) {
             return $this->goBack(Yii::$app->getHomeUrl());
         }
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('login_modal', [
-                'model' => $model,
-                'module' => $this->module,
-            ]);
-        }
-        return $this->render('login', ['model' => $model, 'module' => $this->module]);
+        return $this->render('login', ['model' => $model]);
     }
 
     /**
@@ -124,9 +118,9 @@ class SecurityController extends Controller
      */
     public function authenticate(ClientInterface $client)
     {
-        $account = Social::find()->byClient($client)->one();
+        $account = UserSocialAccount::find()->byClient($client)->one();
         if ($account === null) {
-            $account = Social::create($client);
+            $account = UserSocialAccount::create($client);
         }
         if ($account->user instanceof User) {
             if ($account->user->isBlocked) {
@@ -149,9 +143,9 @@ class SecurityController extends Controller
     public function connect(ClientInterface $client)
     {
         /**
-         * @var Social $account
+         * @var UserSocialAccount $account
          */
-        $account = new Social();
+        $account = new UserSocialAccount();
         $account->connectWithUser($client);
         $this->action->successUrl = Url::to(['/user/settings/networks']);
     }
