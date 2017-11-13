@@ -3,8 +3,9 @@
 namespace yuncms\user\models;
 
 use Yii;
+use DateTime;
+use DateTimeZone;
 use yii\db\ActiveRecord;
-use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "{{%user_profile}}".
@@ -263,22 +264,23 @@ class UserProfile extends ActiveRecord
 
     /**
      * Set the user's time zone.
-     * @param \DateTimeZone $timezone the timezone to save to the user's profile
+     * @param DateTimeZone $timeZone
+     * @internal param DateTimeZone $timezone the timezone to save to the user's profile
      */
-    public function setTimeZone(\DateTimeZone $timeZone)
+    public function setTimeZone(DateTimeZone $timeZone)
     {
         $this->setAttribute('timezone', $timeZone->getName());
     }
 
     /**
      * Converts DateTime to user's local time
-     * @param \DateTime the datetime to convert
-     * @return \DateTime
+     * @param DateTime $dateTime the datetime to convert
+     * @return DateTime
      */
-    public function toLocalTime(\DateTime $dateTime = null)
+    public function toLocalTime(DateTime $dateTime = null)
     {
         if ($dateTime === null) {
-            $dateTime = new \DateTime();
+            $dateTime = new DateTime();
         }
 
         return $dateTime->setTimezone($this->getTimeZone());

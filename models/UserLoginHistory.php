@@ -40,12 +40,6 @@ class UserLoginHistory extends ActiveRecord
                 ActiveRecord::EVENT_BEFORE_INSERT => ['created_at']
             ],
         ];
-        $behaviors['user'] = [
-            'class' => BlameableBehavior::className(),
-            'attributes' => [
-                ActiveRecord::EVENT_BEFORE_INSERT => ['user_id']
-            ],
-        ];
         return $behaviors;
     }
 

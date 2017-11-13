@@ -5,22 +5,16 @@ namespace yuncms\user\jobs;
 use yii\base\BaseObject;
 use yii\queue\RetryableJob;
 use yuncms\user\models\User;
+use yuncms\user\models\UserLoginHistory;
 
 /**
- * 记录最后活动时间
- * @package yuncms\user\jobs
+ * Class LoginHistoryJob.
  */
-class LastVisitJob extends BaseObject implements RetryableJob
+class LoginHistoryJob extends BaseObject implements RetryableJob
 {
-    /**
-     * @var int user id
-     */
     public $user_id;
 
-    /**
-     * @var int 最后活动时间
-     */
-    public $time;
+    public $ip;
 
     /**
      * @inheritdoc
@@ -28,7 +22,8 @@ class LastVisitJob extends BaseObject implements RetryableJob
     public function execute($queue)
     {
         if (($user = $this->getUser()) != null) {
-            $user->extra->updateAttributes(['last_visit' => $this->time]);
+            $model = new UserLoginHistory(['ip' => $this->ip]);
+            $model->save();
         }
     }
 

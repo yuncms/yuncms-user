@@ -15,6 +15,8 @@ use yii\base\BootstrapInterface;
 use yii\console\Application as ConsoleApplication;
 use yii\web\Application as WebApplication;
 use yuncms\user\jobs\LastVisitJob;
+use yuncms\user\jobs\ResetLoginDataJob;
+use yuncms\user\models\UserExtra;
 
 /**
  * Class Bootstrap
@@ -53,9 +55,9 @@ class Bootstrap implements BootstrapInterface
 
                 //监听用户登录事件
                 /** @var \yii\web\UserEvent $event */
-                $app->user->on(User::EVENT_AFTER_LOGIN, function ($event) {
+                $app->user->on(User::EVENT_AFTER_LOGIN, function ($event) use ($app) {
                     //记录最后登录时间记录最后登录IP记录登录次数
-                    $event->identity->resetLoginData();
+                    Yii::$app->queue->push(new ResetLoginDataJob(['user_id' => $app->user->identity->getId(), 'ip' => Yii::$app->request->userIP]));
                 });
                 //设置用户所在时区
 //                $app->on(\yii\web\Application::EVENT_BEFORE_REQUEST, function ($event) use ($app) {
