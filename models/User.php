@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
+use yii\web\IdentityInterface;
 use yuncms\tag\models\Tag;
 
 /**
@@ -41,8 +42,22 @@ use yuncms\tag\models\Tag;
  * @property-read boolean $isDraft 是否草稿
  * @property-read boolean $isPublished 是否发布
  */
-class User extends ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
+    /**
+     * @var string Default username regexp
+     */
+    public static $usernameRegexp = '/^[-a-zA-Z0-9_]+$/u';
+
+    /**
+     * @var string Default nickname regexp
+     */
+    public static $nicknameRegexp = '/^[-a-zA-Z0-9_\x{4e00}-\x{9fa5}\.@]+$/u';
+
+    /**
+     * @var string Default mobile regexp
+     */
+    public static $mobileRegexp = '/^13[\d]{9}$|^15[\d]{9}$|^17[\d]{9}$|^18[\d]{9}$/';
 
     //场景定义
     const SCENARIO_CREATE = 'create';//创建
@@ -63,11 +78,18 @@ class User extends ActiveRecord
      */
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
-        $behaviors['timestamp'] = [
-            'class' => TimestampBehavior::className()
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior'
+            ],
+            'taggable' => [
+                'class' => 'creocoder\taggable\TaggableBehavior',
+                'tagValuesAsArray' => true,
+                'tagRelation' => 'tags',
+                'tagValueAttribute' => 'id',
+                'tagFrequencyAttribute' => 'frequency',
+            ],
         ];
-        return $behaviors;
     }
 
     /**
@@ -184,6 +206,114 @@ class User extends ActiveRecord
     public static function find()
     {
         return new UserQuery(get_called_class());
+    }
+
+    /**
+     * 通过登陆邮箱或手机号获取用户
+     * @param string $emailOrMobile
+     * @return User|null
+     */
+    public static function findByEmailOrMobile($emailOrMobile)
+    {
+        if (filter_var($emailOrMobile, FILTER_VALIDATE_EMAIL)) {
+            return static::findByEmail($emailOrMobile);
+        } else if (preg_match(self::$mobileRegexp, $emailOrMobile)) {
+            return static::findByMobile($emailOrMobile);
+        }
+        return null;
+    }
+
+    /**
+     * 通过邮箱获取用户
+     * @param string $email 邮箱
+     * @return null|static
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
+
+    /**
+     * 通过手机号获取用户
+     * @param string $mobile
+     * @return static
+     */
+    public static function findByMobile($mobile)
+    {
+        return static::findOne(['mobile' => $mobile]);
+    }
+
+    /**
+     * 通过用户名获取用户
+     * @param string $username 用户标识
+     * @return null|static
+     */
+    public static function findModelByUsername($username)
+    {
+        return static::findOne(['username' => $username]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+    /**
+     * 获取auth_key
+     * @inheritdoc
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    /**
+     * 验证密码
+     *
+     * @param string $password password to validate
+     * @return boolean if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    /**
+     * 验证AuthKey
+     * @param string $authKey
+     * @return boolean
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+
+    /**
+     * 创建 "记住我" 身份验证Key
+     * @return void
+     */
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
     }
 
 //    public function afterFind()
