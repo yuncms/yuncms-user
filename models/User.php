@@ -146,7 +146,7 @@ class User extends ActiveRecord implements IdentityInterface
             static::SCENARIO_EMAIL_REGISTER => ['nickname', 'email', 'password'],
             static::SCENARIO_MOBILE_REGISTER => ['mobile', 'password'],
             static::SCENARIO_SETTINGS => ['username', 'email', 'password'],
-            static::SCENARIO_CONNECT => ['nickname'],//链接账户
+            static::SCENARIO_CONNECT => ['nickname', 'email', 'password'],//链接账户
         ]);
     }
 
@@ -186,7 +186,7 @@ class User extends ActiveRecord implements IdentityInterface
             'mobileDefault' => ['mobile', 'default', 'value' => null],
 
             // password rules
-            'passwordRequired' => ['password', 'required', 'on' => [self::SCENARIO_EMAIL_REGISTER]],
+            'passwordRequired' => ['password', 'required', 'on' => [self::SCENARIO_EMAIL_REGISTER, self::SCENARIO_MOBILE_REGISTER]],
             'passwordLength' => ['password', 'string', 'min' => 6],
 
             // tags rules
