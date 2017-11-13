@@ -574,6 +574,32 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * 电子邮件激活
+     *
+     * @param string $code Confirmation code.
+     *
+     * @return boolean
+     */
+    public function attemptConfirmation($code)
+    {
+        $token = UserToken::findOne(['user_id' => $this->id, 'code' => $code, 'type' => UserToken::TYPE_CONFIRMATION]);
+        if ($token instanceof UserToken && !$token->isExpired) {
+            $token->delete();
+            if (($success = $this->setEmailConfirm())) {
+                Yii::$app->user->login($this, $this->getSetting('rememberFor'));
+                $message = Yii::t('user', 'Thank you, registration is now complete.');
+            } else {
+                $message = Yii::t('user', 'Something went wrong and your account has not been confirmed.');
+            }
+        } else {
+            $success = false;
+            $message = Yii::t('user', 'The confirmation link is invalid or expired. Please try requesting a new one.');
+        }
+        Yii::$app->session->setFlash($success ? 'success' : 'danger', $message);
+        return $success;
+    }
+
+    /**
      * 该方法将更新用户的电子邮件，如果`unconfirmed_email`字段为空将返回false,如果该邮件已经有人使用了将返回false; 否则返回true
      *
      * @param string $code

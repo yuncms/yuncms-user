@@ -118,7 +118,7 @@ class RegistrationController extends Controller
             return $this->redirect(['/user/settings/networks']);
         }
 
-        $account = Social::find()->byCode($code)->one();
+        $account = UserSocialAccount::find()->byCode($code)->one();
 
         if ($account === null || $account->getIsConnected()) {
             throw new NotFoundHttpException();
@@ -127,8 +127,8 @@ class RegistrationController extends Controller
         /** @var User $user */
         $user = Yii::createObject([
             'class' => User::className(),
-            'scenario' => 'connect',
-            'username' => $account->username,
+            'scenario' => User::SCENARIO_CONNECT,
+            'nickname' => $account->username,
             'email' => $account->email,
         ]);
 
@@ -140,7 +140,6 @@ class RegistrationController extends Controller
 
         return $this->render('connect', [
             'model' => $user,
-            'account' => $account,
         ]);
     }
 

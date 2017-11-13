@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php $auth = Connect::begin([
                     'baseAuthUrl' => ['/user/security/auth'],
-                    'accounts' => $user->accounts,
+                    'accounts' => $user->socialAccounts,
                     'autoRender' => false,
                     'popupMode' => false,
                 ]) ?>
