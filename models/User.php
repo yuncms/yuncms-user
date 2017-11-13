@@ -582,6 +582,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function attemptConfirmation($code)
     {
+        /** @var UserToken $token */
         $token = UserToken::findOne(['user_id' => $this->id, 'code' => $code, 'type' => UserToken::TYPE_CONFIRMATION]);
         if ($token instanceof UserToken && !$token->isExpired) {
             $token->delete();

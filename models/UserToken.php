@@ -20,9 +20,7 @@ use yuncms\user\UserTrait;
  *
  * @property User $user
  *
- * @property-read bool isAuthor 是否是作者
- * @property-read boolean $isDraft 是否草稿
- * @property-read boolean $isPublished 是否发布
+ * @property-read bool isExpired 是否过期
  */
 class UserToken extends ActiveRecord
 {
