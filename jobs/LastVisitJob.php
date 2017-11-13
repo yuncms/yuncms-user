@@ -4,7 +4,7 @@ namespace yuncms\user\jobs;
 
 use yii\base\BaseObject;
 use yii\queue\RetryableJob;
-use yuncms\user\models\Extend;
+use yuncms\user\models\UserExtra;
 
 /**
  * 记录最后活动时间
@@ -27,7 +27,7 @@ class LastVisitJob extends BaseObject implements RetryableJob
      */
     public function execute($queue)
     {
-        Extend::updateAll(['last_visit' => $this->time], ['user_id' => $this->user_id]);
+        UserExtra::updateAll(['last_visit' => $this->time], ['user_id' => $this->user_id]);
     }
 
     /**

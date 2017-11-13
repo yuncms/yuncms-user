@@ -9,7 +9,7 @@ namespace yuncms\user\jobs;
 
 use yii\base\BaseObject;
 use yii\queue\RetryableJob;
-use yuncms\user\models\Extend;
+use yuncms\user\models\UserExtra;
 
 /**
  * 更新扩展表计数器字段
@@ -37,7 +37,7 @@ class UpdateExtEndCounterJob extends BaseObject implements RetryableJob
      */
     public function execute($queue)
     {
-        Extend::updateAllCounters([$this->field => $this->counter], ['user_id' => $this->user_id]);
+        UserExtra::updateAllCounters([$this->field => $this->counter], ['user_id' => $this->user_id]);
     }
 
     /**

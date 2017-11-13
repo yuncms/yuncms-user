@@ -34,7 +34,6 @@ use yuncms\tag\models\Tag;
  * @property UserLoginHistory[] $userLoginHistories
  * @property UserProfile $profile
  * @property UserSocialAccount[] $socialAccounts
- * @property UserTag[] $userTags
  * @property Tag[] $tags
  * @property UserToken[] $userTokens
  *
@@ -160,14 +159,6 @@ class User extends ActiveRecord
     public function getUserSocialAccounts()
     {
         return $this->hasMany(UserSocialAccount::className(), ['user_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserTags()
-    {
-        return $this->hasMany(UserTag::className(), ['user_id' => 'id']);
     }
 
     /**
