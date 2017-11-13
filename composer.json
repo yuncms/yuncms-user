@@ -1,6 +1,6 @@
 {
   "name": "yuncms/yuncms-user",
-  "description": "Flexible user registration and authentication module for YUNCMS",
+  "description": "The user module for yuncms.",
   "keywords": [
     "yii2",
     "yii2-user",
