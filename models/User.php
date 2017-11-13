@@ -550,6 +550,50 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * 该方法将更新用户的电子邮件，如果`unconfirmed_email`字段为空将返回false,如果该邮件已经有人使用了将返回false; 否则返回true
+     *
+     * @param string $code
+     *
+     * @return boolean
+     * @throws \Exception
+     */
+    public function attemptEmailChange($code)
+    {
+        /** @var UserToken $token */
+        $token = UserToken::find()->where(['user_id' => $this->id, 'code' => $code])->andWhere(['in', 'type', [
+            UserToken::TYPE_CONFIRM_NEW_EMAIL,
+            UserToken::TYPE_CONFIRM_OLD_EMAIL
+        ]])->one();
+        if (empty($this->unconfirmed_email) || $token === null || $token->isExpired) {
+            Yii::$app->session->setFlash('danger', Yii::t('user', 'Your confirmation token is invalid or expired'));
+        } else {
+            $token->delete();
+            if (empty($this->unconfirmed_email)) {
+                Yii::$app->session->setFlash('danger', Yii::t('user', 'An error occurred processing your request'));
+            } elseif (static::find()->where(['email' => $this->unconfirmed_email])->exists() == false) {
+                if ($this->getSetting('emailChangeStrategy') == Settings::STRATEGY_SECURE) {
+                    switch ($token->type) {
+                        case UserToken::TYPE_CONFIRM_NEW_EMAIL:
+                            $this->flags |= self::NEW_EMAIL_CONFIRMED;
+                            Yii::$app->session->setFlash('success', Yii::t('user', 'Awesome, almost there. Now you need to click the confirmation link sent to your old email address'));
+                            break;
+                        case UserToken::TYPE_CONFIRM_OLD_EMAIL:
+                            $this->flags |= self::OLD_EMAIL_CONFIRMED;
+                            Yii::$app->session->setFlash('success', Yii::t('user', 'Awesome, almost there. Now you need to click the confirmation link sent to your new email address'));
+                            break;
+                    }
+                }
+                if ($this->getSetting('emailChangeStrategy') == Settings::STRATEGY_DEFAULT || ($this->flags & self::NEW_EMAIL_CONFIRMED && $this->flags & self::OLD_EMAIL_CONFIRMED)) {
+                    $this->email = $this->unconfirmed_email;
+                    $this->unconfirmed_email = null;
+                    Yii::$app->session->setFlash('success', Yii::t('user', 'Your email address has been changed'));
+                }
+                $this->save(false);
+            }
+        }
+    }
+
+    /**
      * 此方法用于注册新用户帐户。 如果 enableConfirmation 设置为true，则此方法
      * 将生成新的确认令牌，并使用邮件发送给用户。
      *

@@ -38,7 +38,7 @@ class LoginForm extends Model
     public $rememberMe = true;
 
     /**
-     * @var \yuncms\user\models\User
+     * @var User
      */
     protected $user;
 

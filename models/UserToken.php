@@ -53,55 +53,6 @@ class UserToken extends ActiveRecord
     }
 
     /**
-     * 定义行为
-     * @return array
-     */
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        $behaviors['timestamp'] = [
-            'class' => TimestampBehavior::className(),
-            'attributes' => [
-                ActiveRecord::EVENT_BEFORE_INSERT => ['created_at']
-            ],
-        ];
-        $behaviors['user'] = [
-            'class' => BlameableBehavior::className(),
-            'attributes' => [
-                ActiveRecord::EVENT_BEFORE_INSERT => ['user_id']
-            ],
-        ];
-        return $behaviors;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function scenarios()
-    {
-        $scenarios = parent::scenarios();
-        return ArrayHelper::merge($scenarios, [
-            static::SCENARIO_CREATE => [],
-            static::SCENARIO_UPDATE => [],
-        ]);
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['user_id', 'code', 'type', 'created_at'], 'required'],
-            [['user_id', 'type', 'created_at'], 'integer'],
-            [['code'], 'string', 'max' => 32],
-            [['user_id', 'code', 'type'], 'unique', 'targetAttribute' => ['user_id', 'code', 'type']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-        ];
-    }
-
-    /**
      * @inheritdoc
      */
     public function attributeLabels()
@@ -120,6 +71,30 @@ class UserToken extends ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return boolean Whether token has expired.
+     */
+    public function getIsExpired()
+    {
+        switch ($this->type) {
+            case self::TYPE_CONFIRMATION:
+            case self::TYPE_CONFIRM_NEW_EMAIL:
+            case self::TYPE_CONFIRM_OLD_EMAIL:
+                $expirationTime = $this->getSetting('confirmWithin');
+                break;
+            case self::TYPE_CONFIRM_NEW_MOBILE:
+            case self::TYPE_CONFIRM_OLD_MOBILE:
+                $expirationTime = $this->getSetting('confirmWithin');
+                break;
+            case self::TYPE_RECOVERY:
+                $expirationTime = $this->getSetting('recoverWithin');
+                break;
+            default:
+                throw new \RuntimeException();
+        }
+        return ($this->created_at + $expirationTime) < time();
     }
 
     /**
@@ -167,15 +142,23 @@ class UserToken extends ActiveRecord
     /**
      * @inheritdoc
      */
-//    public function beforeSave($insert)
-//    {
-//        if (!parent::beforeSave($insert)) {
-//            return false;
-//        }
-//
-//        // ...custom code here...
-//        return true;
-//    }
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        if ($insert) {
+            static::deleteAll(['user_id' => $this->user_id, 'type' => $this->type]);
+            $this->setAttribute('created_at', time());
+            if ($this->type == self::TYPE_CONFIRM_NEW_MOBILE || $this->type == self::TYPE_CONFIRM_OLD_MOBILE) {
+                $this->setAttribute('code', Yii::$app->security->generateRandomString(6));
+            } else {
+                $this->setAttribute('code', Yii::$app->security->generateRandomString());
+            }
+        }
+
+        return true;
+    }
 
     /**
      * @inheritdoc
@@ -183,12 +166,7 @@ class UserToken extends ActiveRecord
 //    public function afterSave($insert, $changedAttributes)
 //    {
 //        parent::afterSave($insert, $changedAttributes);
-//        Yii::$app->queue->push(new ScanTextJob([
-//            'modelId' => $this->getPrimaryKey(),
-//            'modelClass' => get_class($this),
-//            'scenario' => $this->isNewRecord ? 'new' : 'edit',
-//            'category'=>'',
-//        ]));
+//
 //        // ...custom code here...
 //    }
 
