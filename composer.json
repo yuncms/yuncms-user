@@ -18,7 +18,8 @@
     "xutl/yii2-cropper-asset": "~1.0",
     "xutl/yii2-authclient": "~1.0",
     "xutl/yii2-fontawesome-asset": "~2.0",
-    "yuncms/yuncms-core": "~2.0"
+    "yuncms/yuncms-core": "~2.0",
+    "yuncms/yuncms-tag": "~2.0"
   },
   "require-dev": {
     "codeception/base": "^2.2.3",
