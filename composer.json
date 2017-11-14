@@ -19,6 +19,7 @@
     "xutl/yii2-authclient": "~1.0",
     "xutl/yii2-fontawesome-asset": "~2.0",
     "xutl/yii2-fmt-asset": "~1.0",
+    "xutl/yii2-wechat": "~2.0.0",
     "yuncms/yuncms-core": "~2.0",
     "yuncms/yuncms-tag": "~2.0"
   },
