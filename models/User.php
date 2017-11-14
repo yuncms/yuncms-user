@@ -11,6 +11,7 @@ use yii\helpers\Url;
 use yii\web\Application as WebApplication;
 use yii\web\IdentityInterface;
 use yuncms\core\helpers\PasswordHelper;
+use yuncms\oauth2\OAuth2IdentityInterface;
 use yuncms\tag\models\Tag;
 use yuncms\user\frontend\assets\UserAsset;
 use yuncms\user\UserTrait;
@@ -51,7 +52,7 @@ use yuncms\user\UserTrait;
  * @property-read bool $isEmailConfirmed 是否已经邮箱激活
  * @property-read bool $isAvatar 是否有头像
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInterface
 {
     use UserTrait;
 
