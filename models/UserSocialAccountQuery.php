@@ -3,7 +3,7 @@
 namespace yuncms\user\models;
 
 use yii\db\ActiveQuery;
-use yuncms\user\clients\ClientInterface;
+use yii\authclient\ClientInterface as BaseClientInterface;
 
 /**
  * This is the ActiveQuery class for [[UserSocialAccount]].
@@ -72,10 +72,10 @@ class UserSocialAccountQuery extends ActiveQuery
 
     /**
      * Finds an account by client.
-     * @param ClientInterface $client
+     * @param BaseClientInterface $client
      * @return UserSocialAccountQuery
      */
-    public function byClient(ClientInterface $client)
+    public function byClient(BaseClientInterface $client)
     {
         return $this->andWhere(['provider' => $client->getId(),'client_id' => $client->getUserAttributes()['id']]);
     }

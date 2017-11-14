@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\Json;
 use yii\helpers\Url;
+use yii\authclient\ClientInterface as BaseClientInterface;
 use yuncms\user\clients\ClientInterface;
 
 /**
@@ -121,7 +122,7 @@ class UserSocialAccount extends ActiveRecord
         return $this->_data;
     }
 
-    public static function create(ClientInterface $client)
+    public static function create(BaseClientInterface $client)
     {
         /** @var UserSocialAccount $account */
         $account = Yii::createObject([
@@ -148,9 +149,9 @@ class UserSocialAccount extends ActiveRecord
     /**
      * Tries to find an account and then connect that account with current user.
      *
-     * @param ClientInterface $client
+     * @param BaseClientInterface $client
      */
-    public static function connectWithUser(ClientInterface $client)
+    public static function connectWithUser(BaseClientInterface $client)
     {
         if (Yii::$app->user->isGuest) {
             Yii::$app->session->setFlash('danger', Yii::t('user', 'Something went wrong'));
@@ -170,12 +171,12 @@ class UserSocialAccount extends ActiveRecord
     /**
      * Tries to find account, otherwise creates new account.
      *
-     * @param ClientInterface $client
+     * @param BaseClientInterface $client
      *
      * @return UserSocialAccount
      * @throws \yii\base\InvalidConfigException
      */
-    protected static function fetchAccount(ClientInterface $client)
+    protected static function fetchAccount(BaseClientInterface $client)
     {
         $account = UserSocialAccount::find()->byClient($client)->one();
         if (null === $account) {
