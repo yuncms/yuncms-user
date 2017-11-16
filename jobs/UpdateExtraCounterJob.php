@@ -39,7 +39,7 @@ class UpdateExtraCounterJob extends BaseObject implements RetryableJob
     public function execute($queue)
     {
         if (($user = $this->getUser()) != null) {
-            $user->extra->updateAttributes([$this->field => $this->counter]);
+            $user->extra->updateCounters([$this->field => $this->counter]);
         }
     }
 
