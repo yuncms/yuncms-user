@@ -69,6 +69,14 @@ class UserExtra extends ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProfile()
+    {
+        return $this->hasOne(UserProfile::className(), ['user_id' => 'user_id']);
+    }
+
+    /**
      * @inheritdoc
      * @return UserExtraQuery the active query used by this AR class.
      */
