@@ -134,6 +134,8 @@ class UserSocialAccount extends ActiveRecord
 
         if ($client instanceof ClientInterface) {
             $account->setAttributes(['username' => $client->getUsername(), 'email' => $client->getEmail()], false);
+        } else if ($client instanceof BaseClientInterface) {
+            $account->setAttributes($client->getUserAttributes(), false);
         }
 
         if (($user = static::fetchUser($account)) instanceof User) {
