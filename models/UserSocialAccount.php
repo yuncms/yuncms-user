@@ -138,7 +138,7 @@ class UserSocialAccount extends ActiveRecord
             $account->setAttributes($client->getUserAttributes(), false);
         }
 
-        if (($user = static::fetchUser($account)) instanceof User) {
+        if (!empty($account->email) && ($user = static::fetchUser($account)) instanceof User) {
             $account->user_id = $user->id;
         }
 
