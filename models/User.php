@@ -104,11 +104,6 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
     public static $nicknameRegexp = '/^[-a-zA-Z0-9_\x{4e00}-\x{9fa5}\.@]+$/u';
 
     /**
-     * @var string Default mobile regexp
-     */
-    public static $mobileRegexp = '/^13[\d]{9}$|^15[\d]{9}$|^17[\d]{9}$|^18[\d]{9}$/';
-
-    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -183,7 +178,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
 
             //mobile rules
             'mobileRequired' => ['mobile', 'required', 'on' => [self::SCENARIO_MOBILE_REGISTER]],
-            'mobilePattern' => ['mobile', 'match', 'pattern' => static::$mobileRegexp],
+            'mobilePattern' => ['mobile', 'yuncms\core\validators\MobileValidator'],
             'mobileLength' => ['mobile', 'string', 'max' => 11],
             'mobileUnique' => ['mobile', 'unique', 'message' => Yii::t('user', 'This phone has already been taken')],
             'mobileDefault' => ['mobile', 'default', 'value' => null],
