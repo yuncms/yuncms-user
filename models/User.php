@@ -297,24 +297,12 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function getAvatar($size = self::AVATAR_MIDDLE)
     {
-        $size = in_array($size, ['big', 'middle', 'small']) ? $size : 'big';
+        $size = in_array($size, [self::AVATAR_BIG, self::AVATAR_MIDDLE, self::AVATAR_SMALL]) ? $size : self::AVATAR_BIG;
         if ($this->getIsAvatar()) {
-            $avatarFileName = "_avatar_$size.jpg";
+            $avatarFileName = "_avatar_{$size}.jpg";
             return $this->getAvatarUrl($this->id) . $avatarFileName;
         } else {
-            switch ($size) {
-                case 'big':
-                    $avatarUrl = '/img/no_avatar_big.gif';
-                    break;
-                case 'middle':
-                    $avatarUrl = '/img/no_avatar_middle.gif';
-                    break;
-                case 'small':
-                    $avatarUrl = '/img/no_avatar_small.gif';
-                    break;
-                default:
-                    $avatarUrl = '/img/no_avatar_big.gif';
-            }
+            $avatarUrl = "/img/no_avatar_{$size}.gif";
             if (Yii::getAlias('@webroot', false)) {
                 $baseUrl = UserAsset::register(Yii::$app->view)->baseUrl;
                 return Url::to($baseUrl . $avatarUrl, true);
