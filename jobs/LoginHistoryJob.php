@@ -3,14 +3,14 @@
 namespace yuncms\user\jobs;
 
 use yii\base\BaseObject;
-use yii\queue\RetryableJob;
+use yii\queue\RetryableJobInterface;
 use yuncms\user\models\User;
 use yuncms\user\models\UserLoginHistory;
 
 /**
  * Class LoginHistoryJob.
  */
-class LoginHistoryJob extends BaseObject implements RetryableJob
+class LoginHistoryJob extends BaseObject implements RetryableJobInterface
 {
     public $user_id;
 

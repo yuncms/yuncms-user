@@ -3,14 +3,14 @@
 namespace yuncms\user\jobs;
 
 use yii\base\BaseObject;
-use yii\queue\RetryableJob;
+use yii\queue\RetryableJobInterface;
 use yuncms\user\models\User;
 
 /**
  * 记录最后活动时间
  * @package yuncms\user\jobs
  */
-class LastVisitJob extends BaseObject implements RetryableJob
+class LastVisitJob extends BaseObject implements RetryableJobInterface
 {
     /**
      * @var int user id
