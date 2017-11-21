@@ -11,6 +11,7 @@ use yii\helpers\Url;
 use yii\web\Application as WebApplication;
 use yii\web\IdentityInterface;
 use yuncms\core\helpers\PasswordHelper;
+use yuncms\core\validators\MobileValidator;
 use yuncms\oauth2\OAuth2IdentityInterface;
 use yuncms\tag\models\Tag;
 use yuncms\user\frontend\assets\UserAsset;
@@ -178,7 +179,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
 
             //mobile rules
             'mobileRequired' => ['mobile', 'required', 'on' => [self::SCENARIO_MOBILE_REGISTER]],
-            'mobilePattern' => ['mobile', 'yuncms\core\validators\MobileValidator'],
+            'mobilePattern' => ['mobile', MobileValidator::className()],
             'mobileLength' => ['mobile', 'string', 'max' => 11],
             'mobileUnique' => ['mobile', 'unique', 'message' => Yii::t('user', 'This phone has already been taken')],
             'mobileDefault' => ['mobile', 'default', 'value' => null],
