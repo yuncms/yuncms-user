@@ -300,7 +300,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
         } else {
             $avatarUrl = "/img/no_avatar_{$size}.gif";
             if (Yii::getAlias('@webroot', false)) {
-                $baseUrl = UserAsset::register(Yii::$app->view)->baseUrl . '?_t=' . $this->updated_at;
+                $baseUrl = UserAsset::register(Yii::$app->view)->baseUrl;
                 return Url::to($baseUrl . $avatarUrl, true);
             } else {
                 return '';
