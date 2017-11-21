@@ -8,15 +8,14 @@
 namespace yuncms\user\jobs;
 
 use yii\base\BaseObject;
-use yii\queue\RetryableJob;
+use yii\queue\RetryableJobInterface;
 use yuncms\user\models\User;
-use yuncms\user\models\UserExtra;
 
 /**
  * 更新扩展表计数器字段
  * @package yuncms\user\jobs
  */
-class UpdateExtraCounterJob extends BaseObject implements RetryableJob
+class UpdateExtraCounterJob extends BaseObject implements RetryableJobInterface
 {
     /**
      * @var int user id
