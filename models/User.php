@@ -11,7 +11,6 @@ use yii\helpers\Url;
 use yii\web\Application as WebApplication;
 use yii\web\IdentityInterface;
 use yuncms\core\helpers\PasswordHelper;
-use yuncms\core\validators\MobileValidator;
 use yuncms\oauth2\OAuth2IdentityInterface;
 use yuncms\tag\models\Tag;
 use yuncms\user\frontend\assets\UserAsset;
@@ -105,6 +104,11 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
     public static $nicknameRegexp = '/^[-a-zA-Z0-9_\x{4e00}-\x{9fa5}\.@]+$/u';
 
     /**
+     * @var string Default mobile regexp
+     */
+    public static $mobileRegexp = '/^1[34578]{1}[\d]{9}$|^166[\d]{8}$|^19[89]{1}[\d]{8}$/';
+
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -179,7 +183,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
 
             //mobile rules
             'mobileRequired' => ['mobile', 'required', 'on' => [self::SCENARIO_MOBILE_REGISTER]],
-            'mobilePattern' => ['mobile', MobileValidator::className()],
+            'mobilePattern' => ['mobile','match', 'pattern' => static::$mobileRegexp],
             'mobileLength' => ['mobile', 'string', 'max' => 11],
             'mobileUnique' => ['mobile', 'unique', 'message' => Yii::t('user', 'This phone has already been taken')],
             'mobileDefault' => ['mobile', 'default', 'value' => null],
