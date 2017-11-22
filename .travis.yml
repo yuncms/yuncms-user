@@ -18,6 +18,12 @@ cache:
     - vendor
     - $HOME/.composer/cache
 
+# notifications
+notifications:
+  webhooks:
+    - https://oapi.dingtalk.com/robot/send?access_token=$dingtalk_token
+    - https://oapi.dingtalk.com/robot/send?access_token=$dingtalk_token_1
+
 # install dependencies
 install:
   - travis_retry composer self-update
@@ -25,5 +31,3 @@ install:
 script:
   - composer update --prefer-dist
 
-notifications:
-   webhooks: https://oapi.dingtalk.com/robot/send?access_token=$dingtalk_token
