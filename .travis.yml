@@ -23,7 +23,7 @@ install:
   - travis_retry composer self-update
 
 script:
-  - composer install --prefer-dist
+  - composer update --prefer-dist
 
 notifications:
    webhooks: https://oapi.dingtalk.com/robot/send?access_token=$dingtalk_token
