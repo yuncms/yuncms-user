@@ -89,7 +89,7 @@ class UserExtra extends ActiveRecord
      * 获取指定字段排行榜
      * @param string $field 字段
      * @param int $limit
-     * @return array|\yii\db\ActiveRecord[]
+     * @return UserExtra[]
      */
     public static function top($field, $limit)
     {
