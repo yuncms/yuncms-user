@@ -35,6 +35,7 @@ use yii\db\ActiveRecord;
  * @property string $bio
  *
  * @property User $user
+ * @property UserExtra $extra
  *
  * @property-read string $genderName 性别
  * @property-read string $currentName 工作状态
@@ -178,6 +179,7 @@ class UserProfile extends ActiveRecord
 
     /**
      * 获取职业的字符串标识
+     * @return string
      */
     public function getCurrentName()
     {

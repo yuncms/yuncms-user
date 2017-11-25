@@ -8,6 +8,9 @@ use creocoder\taggable\TaggableQueryBehavior;
 /**
  * This is the ActiveQuery class for [[User]].
  *
+ * @method ActiveQuery anyTagValues($values, $attribute = null)
+ * @method ActiveQuery allTagValues($values, $attribute = null)
+ * @method ActiveQuery relatedByTagValues($values, $attribute = null)
  * @see User
  */
 class UserQuery extends ActiveQuery

@@ -19,6 +19,14 @@ use yuncms\user\UserTrait;
 /**
  * This is the model class for table "{{%user}}".
  *
+ * Magic methods:
+ * @method ActiveRecord getTagValues($asArray = null)
+ * @method ActiveRecord setTagValues($values)
+ * @method ActiveRecord addTagValues($values)
+ * @method ActiveRecord removeTagValues($values)
+ * @method ActiveRecord removeAllTagValues()
+ * @method ActiveRecord hasTagValues($values)
+ *
  * Database fields:
  * @property integer $id
  * @property string $username
@@ -39,6 +47,11 @@ use yuncms\user\UserTrait;
  * @property integer $created_at
  * @property integer $updated_at
  *
+ * @property-read boolean $isBlocked 账户是否锁定
+ * @property-read bool $isMobileConfirmed 是否已经手机激活
+ * @property-read bool $isEmailConfirmed 是否已经邮箱激活
+ * @property-read bool $isAvatar 是否有头像
+ *
  * Defined relations:
  * @property UserExtra $extra
  * @property UserLoginHistory[] $userLoginHistories
@@ -47,10 +60,6 @@ use yuncms\user\UserTrait;
  * @property Tag[] $tags
  * @property UserToken[] $userTokens
  *
- * @property-read boolean $isBlocked 账户是否锁定
- * @property-read bool $isMobileConfirmed 是否已经手机激活
- * @property-read bool $isEmailConfirmed 是否已经邮箱激活
- * @property-read bool $isAvatar 是否有头像
  */
 class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInterface
 {
