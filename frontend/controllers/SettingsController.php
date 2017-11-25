@@ -51,7 +51,7 @@ class SettingsController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['profile', 'account', 'privacy', 'avatar', 'confirm', 'networks', 'disconnect','follower-tag'],
+                        'actions' => ['profile', 'account', 'privacy', 'avatar', 'confirm', 'networks', 'disconnect'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -166,31 +166,5 @@ class SettingsController extends Controller
         }
         $account->delete();
         return $this->redirect(['networks']);
-    }
-
-    /**
-     * 关注某tag
-     * @return array
-     * @throws NotFoundHttpException
-     */
-    public function actionFollowerTag()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $tagId = Yii::$app->request->post('tag_id', null);
-        if(($tag = Tag::findOne($tagId)) == null){
-            throw new NotFoundHttpException ();
-        } else {
-            /** @var \yuncms\user\models\User $user */
-            $user = Yii::$app->user->identity;
-            if ($user->hasTagValues($tag->id)) {
-                $user->removeTagValues($tag->id);
-                $user->save();
-                return ['status' => 'unfollowed'];
-            } else {
-                $user->addTagValues($tag->id);
-                $user->save();
-                return ['status' => 'followed'];
-            }
-        }
     }
 }
