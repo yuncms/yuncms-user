@@ -241,6 +241,7 @@ class UserProfile extends ActiveRecord
      * Adds an error when the specified time zone doesn't exist.
      * @param string $attribute the attribute being validated
      * @param array $params values for the placeholders in the error message
+     * @return void
      */
     public function validateTimeZone($attribute, $params)
     {
@@ -268,6 +269,7 @@ class UserProfile extends ActiveRecord
      * Set the user's time zone.
      * @param DateTimeZone $timeZone
      * @internal param DateTimeZone $timezone the timezone to save to the user's profile
+     * @return void
      */
     public function setTimeZone(DateTimeZone $timeZone)
     {

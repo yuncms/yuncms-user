@@ -18,6 +18,7 @@ use yii\db\ActiveRecord;
  * @property integer $last_visit
  *
  * @property User $user
+ * @property UserProfile $profile
  *
  */
 class UserExtra extends ActiveRecord
