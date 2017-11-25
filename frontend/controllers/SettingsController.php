@@ -10,13 +10,12 @@ namespace yuncms\user\frontend\controllers;
 use Yii;
 use yii\web\Response;
 use yii\web\Controller;
-use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
-
+use yuncms\tag\models\Tag;
 use yuncms\user\models\Settings;
 use yuncms\user\models\User;
 use yuncms\user\models\UserProfile;
@@ -52,7 +51,7 @@ class SettingsController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['profile', 'account', 'privacy', 'avatar', 'confirm', 'networks', 'disconnect'],
+                        'actions' => ['profile', 'account', 'privacy', 'avatar', 'confirm', 'networks', 'disconnect','follower-tag'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -167,5 +166,31 @@ class SettingsController extends Controller
         }
         $account->delete();
         return $this->redirect(['networks']);
+    }
+
+    /**
+     * 关注某tag
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function actionFollowerTag()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $tagId = Yii::$app->request->post('tag_id', null);
+        if(($tag = Tag::findOne($tagId)) == null){
+            throw new NotFoundHttpException ();
+        } else {
+            /** @var \yuncms\user\models\User $user */
+            $user = Yii::$app->user->identity;
+            if ($user->hasTagValues($tag->id)) {
+                $user->removeTagValues($tag->id);
+                $user->save();
+                return ['status' => 'unfollowed'];
+            } else {
+                $user->addTagValues($tag->id);
+                $user->save();
+                return ['status' => 'followed'];
+            }
+        }
     }
 }
