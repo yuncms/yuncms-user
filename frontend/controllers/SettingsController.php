@@ -44,6 +44,7 @@ class SettingsController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'disconnect' => ['post'],
+                    'follower-tag'=>['post']
                 ],
             ],
             'access' => [
@@ -51,7 +52,7 @@ class SettingsController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['profile', 'account', 'privacy', 'avatar', 'confirm', 'networks', 'disconnect'],
+                        'actions' => ['profile', 'account', 'privacy', 'avatar', 'confirm', 'networks', 'disconnect','follower-tag'],
                         'roles' => ['@'],
                     ],
                 ],
@@ -113,6 +114,32 @@ class SettingsController extends Controller
         return $this->render('account', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * 关注某tag
+     * @return array
+     * @throws NotFoundHttpException
+     */
+    public function actionFollowerTag()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $tagId = Yii::$app->request->post('tag_id', null);
+        if (($tag = Tag::findOne($tagId)) == null) {
+            throw new NotFoundHttpException ();
+        } else {
+            /** @var \yuncms\user\models\User $user */
+            $user = Yii::$app->user->identity;
+            if ($user->hasTagValues($tag->id)) {
+                $user->removeTagValues($tag->id);
+                $user->save();
+                return ['status' => 'unFollowed'];
+            } else {
+                $user->addTagValues($tag->id);
+                $user->save();
+                return ['status' => 'followed'];
+            }
+        }
     }
 
     /**
