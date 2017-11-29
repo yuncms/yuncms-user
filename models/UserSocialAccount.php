@@ -25,6 +25,8 @@ use yuncms\user\clients\ClientInterface;
  *
  * @property User $user
  *
+ * @property-read string $connectUrl 关联Url
+ * @property-read array $decodedData 开放平台响应数组
  * @property-read bool isAuthor 是否是作者
  * @property-read boolean $isDraft 是否草稿
  * @property-read boolean $isPublished 是否发布
