@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\BootstrapAsset;
-
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
@@ -12,7 +11,6 @@ use yii\bootstrap\BootstrapAsset;
  */
 BootstrapAsset::register($this);
 $this->title = Yii::t('user', 'Sign in');
-//$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $form = ActiveForm::begin([

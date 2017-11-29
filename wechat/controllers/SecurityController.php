@@ -104,28 +104,5 @@ class SecurityController extends Controller
         }
     }
 
-    /**
-     * 将微信用户连接到系统内用户
-     *
-     * @param string $code
-     * @return string|Response
-     * @throws NotFoundHttpException
-     */
-    public function actionConnect($code)
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-        $account = UserSocialAccount::find()->byCode($code)->one();
-        if ($account === null || $account->getIsConnected()) {
-            throw new NotFoundHttpException();
-        }
-        $model = new ConnectForm(['socialAccount' => $account]);
-        if ($model->load(Yii::$app->request->post()) && $model->connect()) {
-            return $this->goBack(Yii::$app->getHomeUrl());
-        }
-        return $this->render('connect', [
-            'model' => $model,
-        ]);
-    }
+
 }
