@@ -74,6 +74,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
     //场景定义
     const SCENARIO_CREATE = 'create';//后台或控制台创建用户
     const SCENARIO_UPDATE = 'update';//后台或控制台修改用户
+    const SCENARIO_REGISTER = 'basic_create';//邮箱注册
     const SCENARIO_EMAIL_REGISTER = 'email_create';//邮箱注册
     const SCENARIO_MOBILE_REGISTER = 'mobile_create';//手机号注册
     const SCENARIO_SETTINGS = 'settings';//更新
@@ -154,6 +155,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
         return ArrayHelper::merge($scenarios, [
             static::SCENARIO_CREATE => ['nickname', 'email', 'password'],
             static::SCENARIO_UPDATE => ['nickname', 'email', 'password'],
+            static::SCENARIO_REGISTER => ['nickname', 'password'],
             static::SCENARIO_EMAIL_REGISTER => ['nickname', 'email', 'password'],
             static::SCENARIO_MOBILE_REGISTER => ['mobile', 'password'],
             static::SCENARIO_SETTINGS => ['username', 'email', 'password'],
