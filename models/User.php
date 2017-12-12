@@ -470,6 +470,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
     /**
      * 创建 "记住我" 身份验证Key
      * @return void
+     * @throws \yii\base\Exception
      */
     public function generateAuthKey()
     {
@@ -479,6 +480,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
     /**
      * 创建 "记住我" 身份验证Key
      * @return void
+     * @throws \yii\base\Exception
      */
     public function generateAccessToken()
     {
@@ -515,6 +517,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      * @param string $password
      *
      * @return boolean
+     * @throws \yii\base\Exception
      */
     public function resetPassword($password)
     {
@@ -524,6 +527,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
     /**
      * 锁定用户
      * @return boolean
+     * @throws \yii\base\Exception
      */
     public function block()
     {
@@ -581,6 +585,9 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      * @param string $code Confirmation code.
      *
      * @return boolean
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function attemptConfirmation($code)
     {

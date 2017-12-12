@@ -85,6 +85,9 @@ class UserController extends Controller
      * Deletes a user.
      *
      * @param string $search Email or username
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($search)
     {

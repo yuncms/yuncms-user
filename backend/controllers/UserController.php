@@ -56,6 +56,7 @@ class UserController extends Controller
 
     /**
      * 用户管理首页
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex()
     {
@@ -74,6 +75,7 @@ class UserController extends Controller
      * If creation is successful, the browser will be redirected to the 'index' page.
      *
      * @return mixed
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionCreate()
     {
@@ -101,6 +103,7 @@ class UserController extends Controller
      * @param int $id
      *
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -126,6 +129,8 @@ class UserController extends Controller
      * @param int $id
      *
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionUpdateProfile($id)
     {
@@ -157,6 +162,7 @@ class UserController extends Controller
      * @param int $id
      *
      * @return string
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -174,6 +180,7 @@ class UserController extends Controller
      * @param int $id
      *
      * @return Response
+     * @throws NotFoundHttpException
      */
     public function actionConfirm($id)
     {
@@ -190,6 +197,10 @@ class UserController extends Controller
      * @param int $id
      *
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
@@ -205,6 +216,7 @@ class UserController extends Controller
      * @param int $id
      *
      * @return Response
+     * @throws NotFoundHttpException
      */
     public function actionBlock($id)
     {

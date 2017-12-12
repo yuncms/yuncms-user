@@ -27,7 +27,6 @@ class Bootstrap implements BootstrapInterface
     /**
      * 初始化
      * @param \yii\base\Application $app
-     * @throws \yii\base\InvalidConfigException
      */
     public function bootstrap($app)
     {

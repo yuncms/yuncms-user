@@ -76,6 +76,7 @@ class ConnectForm extends Model
      * Validates form and logs the user in.
      *
      * @return boolean whether the user is logged in successfully
+     * @throws \yii\base\InvalidConfigException
      */
     public function connect()
     {

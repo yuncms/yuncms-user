@@ -149,7 +149,8 @@ class SettingsController extends Controller
      * @param string $code
      *
      * @return string
-     * @throws \yii\web\HttpException
+     * @throws NotFoundHttpException
+     * @throws \Exception
      */
     public function actionConfirm($id, $code)
     {
@@ -179,8 +180,11 @@ class SettingsController extends Controller
      * @param integer $id
      *
      * @return \yii\web\Response
-     * @throws \yii\web\NotFoundHttpException
-     * @throws \yii\web\ForbiddenHttpException
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDisconnect($id)
     {

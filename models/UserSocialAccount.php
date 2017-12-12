@@ -99,6 +99,7 @@ class UserSocialAccount extends ActiveRecord
     /**
      * Returns connect url.
      * @return string
+     * @throws \yii\base\Exception
      */
     public function getConnectUrl()
     {
@@ -124,6 +125,11 @@ class UserSocialAccount extends ActiveRecord
         return $this->_data;
     }
 
+    /**
+     * @param BaseClientInterface $client
+     * @return object|UserSocialAccount
+     * @throws \yii\base\InvalidConfigException
+     */
     public static function create(BaseClientInterface $client)
     {
         /** @var UserSocialAccount $account */
@@ -154,6 +160,7 @@ class UserSocialAccount extends ActiveRecord
      * Tries to find an account and then connect that account with current user.
      *
      * @param BaseClientInterface $client
+     * @throws \yii\base\InvalidConfigException
      */
     public static function connectWithUser(BaseClientInterface $client)
     {
@@ -197,6 +204,7 @@ class UserSocialAccount extends ActiveRecord
      * @param UserSocialAccount $account
      *
      * @return User|boolean False when can't create user.
+     * @throws \yii\base\InvalidConfigException
      */
     protected static function fetchUser(UserSocialAccount $account)
     {

@@ -84,6 +84,8 @@ class SecurityController extends Controller
     /**
      * 通过微信登录，如果用户不存在，将创建或绑定用户
      * @param OAuth $client
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function authenticate(OAuth $client)
     {

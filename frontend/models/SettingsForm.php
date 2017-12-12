@@ -132,6 +132,7 @@ class SettingsForm extends Model
      * Saves new account settings.
      *
      * @return boolean
+     * @throws \yii\base\InvalidConfigException
      */
     public function save()
     {

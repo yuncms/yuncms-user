@@ -102,6 +102,9 @@ class RecoveryForm extends Model
      * @param UserToken $token
      *
      * @return boolean
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function resetPassword(UserToken $token)
     {
