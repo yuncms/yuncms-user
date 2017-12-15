@@ -25,6 +25,7 @@ class M171113072622Add_defailt_settings extends Migration
             ['integer', 'user', 'confirmWithin', '86400', 1, $date, $date],
             ['integer', 'user', 'recoverWithin', '21600', 1, $date, $date],
             ['integer', 'user', 'cost', '10', 1, $date, $date],
+            ['integer', 'user', 'requestRateLimit', '60', 1, $date, $date],
             ['string', 'user', 'avatarPath', '@webroot/uploads/avatar', 1, $date, $date],
             ['string', 'user', 'avatarUrl', '@web/uploads/avatar', 1, $date, $date],
         ]);

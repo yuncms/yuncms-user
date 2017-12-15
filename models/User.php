@@ -10,6 +10,7 @@ use yii\helpers\Inflector;
 use yii\helpers\Url;
 use yii\web\Application as WebApplication;
 use yii\web\IdentityInterface;
+use yii\filters\RateLimitInterface;
 use yuncms\core\helpers\PasswordHelper;
 use yuncms\oauth2\OAuth2IdentityInterface;
 use yuncms\tag\models\Tag;
@@ -61,7 +62,7 @@ use yuncms\user\UserTrait;
  * @property UserToken[] $userTokens
  *
  */
-class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInterface
+class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInterface, RateLimitInterface
 {
     use UserTrait;
 
@@ -194,7 +195,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
 
             //mobile rules
             'mobileRequired' => ['mobile', 'required', 'on' => [self::SCENARIO_MOBILE_REGISTER]],
-            'mobilePattern' => ['mobile','match', 'pattern' => static::$mobileRegexp],
+            'mobilePattern' => ['mobile', 'match', 'pattern' => static::$mobileRegexp],
             'mobileLength' => ['mobile', 'string', 'max' => 11],
             'mobileUnique' => ['mobile', 'unique', 'message' => Yii::t('user', 'This phone has already been taken')],
             'mobileDefault' => ['mobile', 'default', 'value' => null],
@@ -778,4 +779,48 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
 //
 //        // ...custom code here...
 //    }
+
+    /**
+     * Returns the maximum number of allowed requests and the window size.
+     * @param \yii\web\Request $request the current request
+     * @param \yii\base\Action $action the action to be executed
+     * @return array an array of two elements. The first element is the maximum number of allowed requests,
+     * and the second element is the size of the window in seconds.
+     */
+    public function getRateLimit($request, $action)
+    {
+        $rateLimit = $this->getSetting('requestRateLimit', 60);
+        return [$rateLimit, 60];
+    }
+
+    /**
+     * Loads the number of allowed requests and the corresponding timestamp from a persistent storage.
+     * @param \yii\web\Request $request the current request
+     * @param \yii\base\Action $action the action to be executed
+     * @return array an array of two elements. The first element is the number of allowed requests,
+     * and the second element is the corresponding UNIX timestamp.
+     */
+    public function loadAllowance($request, $action)
+    {
+        $allowance = Yii::$app->redis->GET($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance');
+        $allowanceUpdatedAt = Yii::$app->redis->GET($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance_update_at');
+        if ($allowance && $allowanceUpdatedAt) {
+            return [$allowance, $allowanceUpdatedAt];
+        } else {
+            return [$this->getSetting('requestRateLimit', 60), time()];
+        }
+    }
+
+    /**
+     * Saves the number of allowed requests and the corresponding timestamp to a persistent storage.
+     * @param \yii\web\Request $request the current request
+     * @param \yii\base\Action $action the action to be executed
+     * @param int $allowance the number of allowed requests remaining.
+     * @param int $timestamp the current timestamp.
+     */
+    public function saveAllowance($request, $action, $allowance, $timestamp)
+    {
+        Yii::$app->redis->SETEX($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance', 60, $allowance);
+        Yii::$app->redis->SETEX($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance_update_at', 60, $timestamp);
+    }
 }

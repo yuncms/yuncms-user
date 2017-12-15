@@ -85,9 +85,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'recoverWithin', [
                 'inputTemplate' => '<div class="input-group">{input}<span class="input-group-addon">' . Yii::t('user', 'Second') . '</span></div>',
             ])->input('number')->hint(Yii::t('user', 'The time before a recovery token becomes invalid.')) ?>
-            <?= $form->field($model, 'cost', [
-                'inputTemplate' => '<div class="input-group">{input}<span class="input-group-addon">' . Yii::t('user', 'Second') . '</span></div>',
-            ])->input('number')->hint(Yii::t('user', 'Cost parameter used by the Blowfish hash algorithm.')) ?>
+            <?= $form->field($model, 'cost')->input('number')->hint(Yii::t('user', 'Cost parameter used by the Blowfish hash algorithm.')) ?>
+
+            <?= $form->field($model, 'requestRateLimit', [
+                'inputTemplate' => '<div class="input-group">{input}<span class="input-group-addon">' . Yii::t('user', 'Times') . '</span></div>',
+            ])->input('number')->hint(Yii::t('user', 'RESTFul The maximum number of requests allowed in one minute.')) ?>
 
             <?= Html::submitButton(Yii::t('user', 'Settings'), ['class' => 'btn btn-primary']) ?>
 

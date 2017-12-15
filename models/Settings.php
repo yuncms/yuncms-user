@@ -82,6 +82,11 @@ class Settings extends Model
     public $cost;
 
     /**
+     * @var int 请求限制
+     */
+    public $requestRateLimit;
+
+    /**
      * Email is changed right after user enter's new email address.
      */
     const STRATEGY_INSECURE = 0;
@@ -120,6 +125,7 @@ class Settings extends Model
             'confirmWithin' => 'integer',
             'recoverWithin' => 'integer',
             'cost' => 'integer',
+            'requestRateLimit' => 'integer',
             'avatarPath' => 'string',
             'avatarUrl' => 'string',
         ];
@@ -149,6 +155,7 @@ class Settings extends Model
                 'rememberFor',
                 'confirmWithin',
                 'recoverWithin',
+                'requestRateLimit',
                 'cost',
             ], 'integer'],
 
@@ -162,6 +169,7 @@ class Settings extends Model
             ['confirmWithin', 'default', 'value' => 86400],
             ['recoverWithin', 'default', 'value' => 21600],
             ['cost', 'default', 'value' => 10],
+            ['requestRateLimit', 'default', 'value' => 60],
 
             [['avatarPath', 'avatarUrl'], 'string'],
 
@@ -190,6 +198,7 @@ class Settings extends Model
             'confirmWithin' => Yii::t('user', 'Confirm Within'),
             'recoverWithin' => Yii::t('user', 'Recover Within'),
             'cost' => Yii::t('user', 'Cost'),
+            'requestRateLimit'=>Yii::t('user', 'Request Rate Limit'),
 
             'avatarPath' => Yii::t('user', 'Avatar Path'),
             'avatarUrl' => Yii::t('user', 'Avatar Url'),
