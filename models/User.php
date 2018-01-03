@@ -617,6 +617,8 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      *
      * @return boolean
      * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function attemptEmailChange($code)
     {
@@ -802,8 +804,8 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function loadAllowance($request, $action)
     {
-        $allowance = Yii::$app->redis->GET($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance');
-        $allowanceUpdatedAt = Yii::$app->redis->GET($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance_update_at');
+        $allowance = Yii::$app->cache->GET($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance');
+        $allowanceUpdatedAt = Yii::$app->cache->GET($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance_update_at');
         if ($allowance && $allowanceUpdatedAt) {
             return [$allowance, $allowanceUpdatedAt];
         } else {
@@ -820,7 +822,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function saveAllowance($request, $action, $allowance, $timestamp)
     {
-        Yii::$app->redis->SETEX($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance', 60, $allowance);
-        Yii::$app->redis->SETEX($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance_update_at', 60, $timestamp);
+        Yii::$app->cache->set($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance', $allowance, 60);
+        Yii::$app->cache->set($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance_update_at', $timestamp, 60);
     }
 }

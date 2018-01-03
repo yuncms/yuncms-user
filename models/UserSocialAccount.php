@@ -105,7 +105,6 @@ class UserSocialAccount extends ActiveRecord
     {
         $code = Yii::$app->security->generateRandomString();
         $this->updateAttributes(['code' => md5($code)]);
-
         return Url::to(['/user/registration/connect', 'code' => $code]);
     }
 
