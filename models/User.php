@@ -617,6 +617,8 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      *
      * @return boolean
      * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function attemptEmailChange($code)
     {
