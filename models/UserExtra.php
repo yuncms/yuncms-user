@@ -8,17 +8,17 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "{{%user_extra}}".
  *
- * @property integer $user_id
- * @property string $login_ip
- * @property integer $login_at
- * @property integer $login_num
- * @property integer $views
- * @property integer $supports
- * @property integer $followers
- * @property integer $last_visit
+ * @property integer $user_id 用户ID
+ * @property string $login_ip 登录IP
+ * @property integer $login_at 登录时间
+ * @property integer $login_num 登录次数
+ * @property integer $views 空间查看次数
+ * @property integer $supports 赞次数
+ * @property integer $followers 关注次数
+ * @property integer $last_visit 最后活动时间
  *
- * @property User $user
- * @property UserProfile $profile
+ * @property User $user 用户对象
+ * @property UserProfile $profile 个人资料对象
  *
  */
 class UserExtra extends ActiveRecord

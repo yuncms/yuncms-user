@@ -2,7 +2,7 @@
 
 /**
  * @var \yuncms\user\models\User $user
- * @var \yuncms\user\models\Token $token
+ * @var \yuncms\user\models\UserToken $token
  */
 ?>
 <?= Yii::t('user', 'Hello') ?>,

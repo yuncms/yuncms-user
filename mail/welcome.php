@@ -3,7 +3,7 @@ use yii\helpers\Html;
 /**
  * @var \yuncms\user\Module $module
  * @var \yuncms\user\models\User $user
- * @var \yuncms\user\models\Token $token
+ * @var \yuncms\user\models\UserToken $token
  * @var bool $showPassword
  */
 ?>

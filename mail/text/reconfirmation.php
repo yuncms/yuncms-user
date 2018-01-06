@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \yuncms\user\models\Token $token
+ * @var \yuncms\user\models\UserToken $token
  */
 ?>
 <?= Yii::t('user', 'Hello') ?>,
