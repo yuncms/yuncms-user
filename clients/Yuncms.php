@@ -10,6 +10,10 @@ namespace yuncms\user\clients;
 use Yii;
 use xutl\authclient\Yuncms as BaseYuncms;
 
+/**
+ * Class Yuncms
+ * @package yuncms\user\clients
+ */
 class Yuncms extends BaseYuncms implements ClientInterface
 {
     /**

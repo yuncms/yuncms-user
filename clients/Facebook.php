@@ -10,6 +10,10 @@ namespace yuncms\user\clients;
 use Yii;
 use yii\authclient\clients\Facebook as BaseFacebook;
 
+/**
+ * Class Facebook
+ * @package yuncms\user\clients
+ */
 class Facebook extends BaseFacebook implements ClientInterface
 {
     /**

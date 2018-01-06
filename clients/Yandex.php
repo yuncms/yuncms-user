@@ -12,7 +12,7 @@ use yii\authclient\clients\Yandex as BaseYandex;
 
 /**
  * Class Yandex
- * @package yuncms\user
+ * @package yuncms\user\clients
  */
 class Yandex extends BaseYandex implements ClientInterface
 {

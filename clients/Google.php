@@ -12,7 +12,7 @@ use yii\authclient\clients\Google as BaseGoogle;
 
 /**
  * Class Google
- * @package yuncms\user
+ * @package yuncms\user\clients
  */
 class Google extends BaseGoogle implements ClientInterface
 {

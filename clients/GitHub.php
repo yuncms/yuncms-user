@@ -9,6 +9,10 @@ namespace yuncms\user\clients;
 
 use yii\authclient\clients\GitHub as BaseGitHub;
 
+/**
+ * Class GitHub
+ * @package yuncms\user\clients
+ */
 class GitHub extends BaseGitHub implements ClientInterface
 {
     /** @inheritdoc */

@@ -10,6 +10,10 @@ namespace yuncms\user\clients;
 use Yii;
 use xutl\authclient\Qq as BaseQq;
 
+/**
+ * Class Qq
+ * @package yuncms\user\clients
+ */
 class Qq extends BaseQq implements ClientInterface
 {
     /**

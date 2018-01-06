@@ -10,6 +10,10 @@ namespace yuncms\user\clients;
 use Yii;
 use xutl\authclient\Douban as BaseDouBan;
 
+/**
+ * Class Douban
+ * @package yuncms\user\clients
+ */
 class Douban extends BaseDouBan implements ClientInterface
 {
     /**

@@ -10,6 +10,10 @@ namespace yuncms\user\clients;
 use yii\helpers\ArrayHelper;
 use yii\authclient\clients\Twitter as BaseTwitter;
 
+/**
+ * Class Twitter
+ * @package yuncms\user\clients
+ */
 class Twitter extends BaseTwitter implements ClientInterface
 {
     /**

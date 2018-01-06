@@ -16,7 +16,6 @@ use yii\console\Application as ConsoleApplication;
 use yii\web\Application as WebApplication;
 use yuncms\user\jobs\LastVisitJob;
 use yuncms\user\jobs\ResetLoginDataJob;
-use yuncms\user\models\UserExtra;
 
 /**
  * Class Bootstrap

@@ -28,12 +28,6 @@ $items = [
         'visible' => Yii::$app->hasModule('authentication')
     ],
     [
-        'label' => Yii::t('user', 'My Streams'),
-        'url' => ['/live/manage/index'],
-        'icon' => 'fa fa-video-camera',
-        'visible' => Yii::$app->hasModule('live')
-    ],
-    [
         'label' => Yii::t('user', 'My Funds'),
         'url' => ['/wallet/wallet/index'],
         'icon' => 'fa fa-money',

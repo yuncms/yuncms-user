@@ -10,6 +10,10 @@ namespace yuncms\user\clients;
 use Yii;
 use yii\authclient\clients\Live as BaseLive;
 
+/**
+ * Class Live
+ * @package yuncms\user\clients
+ */
 class Live extends BaseLive implements ClientInterface
 {
     /**

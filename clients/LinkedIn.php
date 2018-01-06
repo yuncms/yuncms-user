@@ -10,8 +10,9 @@ namespace yuncms\user\clients;
 use Yii;
 use yii\authclient\clients\LinkedIn as BaseLinkedIn;
 
-/*
- * @author Sam Mousa <sam@mousa.nl>
+/**
+ * Class LinkedIn
+ * @package yuncms\user\clients
  */
 class LinkedIn extends BaseLinkedIn implements ClientInterface
 {

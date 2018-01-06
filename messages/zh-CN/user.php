@@ -26,6 +26,7 @@ return [
     'Birthday' => '生日',
     'Blocked time' => '封锁时间',
     'Times' => '次',
+    'Timezone'=>'时区',
     'Cost parameter used by the Blowfish hash algorithm.' => 'Blowfish哈希算法使用的成本参数。',
     'Request Rate Limit' => 'RESTFul 速度限制',
     'RESTFul The maximum number of requests allowed in one minute.' => 'RESTFul 一分钟内允许的最大请求次数。',

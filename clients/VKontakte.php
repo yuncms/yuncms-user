@@ -10,7 +10,10 @@ namespace yuncms\user\clients;
 use Yii;
 use yii\authclient\clients\VKontakte as BaseVKontakte;
 
-
+/**
+ * Class VKontakte
+ * @package yuncms\user\clients
+ */
 class VKontakte extends BaseVKontakte implements ClientInterface
 {
     /**
