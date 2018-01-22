@@ -8,13 +8,13 @@
 namespace yuncms\user\clients;
 
 use Yii;
-use xutl\authclient\Wechat as BaseWeChat;
+use xutl\authclient\WeChat as BaseWeChat;
 
 /**
  * Class Wechat
  * @package yuncms\user\clients
  */
-class Wechat extends BaseWeChat implements ClientInterface
+class WeChat extends BaseWeChat implements ClientInterface
 {
     /**
      * @inheritdoc

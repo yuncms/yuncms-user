@@ -8,13 +8,13 @@
 namespace yuncms\user\clients;
 
 use Yii;
-use xutl\authclient\Weibo as BaseWeiBo;
+use xutl\authclient\WeiBo as BaseWeiBo;
 
 /**
  * Class Weibo
  * @package yuncms\user\clients
  */
-class Weibo extends BaseWeiBo implements ClientInterface
+class WeiBo extends BaseWeiBo implements ClientInterface
 {
     /**
      * @inheritdoc

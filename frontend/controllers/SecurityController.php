@@ -115,6 +115,8 @@ class SecurityController extends Controller
      * to create new user account.
      *
      * @param ClientInterface $client
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function authenticate(ClientInterface $client)
     {
@@ -139,6 +141,7 @@ class SecurityController extends Controller
      * 尝试将社交账号连接到用户
      *
      * @param ClientInterface $client
+     * @throws \yii\base\InvalidConfigException
      */
     public function connect(ClientInterface $client)
     {
