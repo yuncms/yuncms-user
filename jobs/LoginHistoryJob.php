@@ -8,7 +8,11 @@ use yuncms\user\models\User;
 use yuncms\user\models\UserLoginHistory;
 
 /**
- * Class LoginHistoryJob.
+ * Class LoginHistoryJob
+ * @package yuncms\user\jobs
+ *
+ * @author Tongle Xu <xutongle@gmail.com>
+ * @since 1.0
  */
 class LoginHistoryJob extends BaseObject implements RetryableJobInterface
 {

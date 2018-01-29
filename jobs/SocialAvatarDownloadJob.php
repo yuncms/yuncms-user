@@ -16,6 +16,9 @@ use yuncms\user\UserTrait;
 /**
  * Class SocialAvatarDownloadJob
  * @package yuncms\user\jobs
+ *
+ * @author Tongle Xu <xutongle@gmail.com>
+ * @since 1.0
  */
 class SocialAvatarDownloadJob extends BaseObject implements RetryableJobInterface
 {

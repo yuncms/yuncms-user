@@ -7,7 +7,11 @@ use yii\queue\RetryableJobInterface;
 use yuncms\user\models\User;
 
 /**
- * Class ResetLoginDataJob.
+ * Class ResetLoginDataJob
+ * @package yuncms\user\jobs
+ *
+ * @author Tongle Xu <xutongle@gmail.com>
+ * @since 1.0
  */
 class ResetLoginDataJob extends BaseObject implements RetryableJobInterface
 {

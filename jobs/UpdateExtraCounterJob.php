@@ -14,6 +14,9 @@ use yuncms\user\models\User;
 /**
  * 更新扩展表计数器字段
  * @package yuncms\user\jobs
+ *
+ * @author Tongle Xu <xutongle@gmail.com>
+ * @since 1.0
  */
 class UpdateExtraCounterJob extends BaseObject implements RetryableJobInterface
 {

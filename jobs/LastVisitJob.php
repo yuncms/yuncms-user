@@ -9,6 +9,9 @@ use yuncms\user\models\User;
 /**
  * 记录最后活动时间
  * @package yuncms\user\jobs
+ *
+ * @author Tongle Xu <xutongle@gmail.com>
+ * @since 1.0
  */
 class LastVisitJob extends BaseObject implements RetryableJobInterface
 {
