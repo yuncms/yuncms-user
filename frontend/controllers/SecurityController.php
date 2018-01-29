@@ -31,6 +31,7 @@ use yuncms\user\UserTrait;
 class SecurityController extends Controller
 {
     use UserTrait;
+
     /**
      * @inheritdoc
      */

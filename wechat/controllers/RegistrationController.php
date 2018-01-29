@@ -36,7 +36,7 @@ class RegistrationController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => [ 'connect'],
+                        'actions' => ['connect'],
                         'roles' => ['?', '@']
                     ]
                 ]
@@ -50,6 +50,7 @@ class RegistrationController extends Controller
      * @param string $code
      * @return string|Response
      * @throws NotFoundHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionConnect($code)
     {

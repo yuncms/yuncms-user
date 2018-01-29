@@ -98,6 +98,7 @@ class SettingsController extends Controller
     /**
      * Displays page where user can update account settings (username, email or password).
      * @return array|string|Response
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionAccount()
     {
@@ -151,6 +152,8 @@ class SettingsController extends Controller
      * @return string
      * @throws NotFoundHttpException
      * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionConfirm($id, $code)
     {
@@ -180,8 +183,6 @@ class SettingsController extends Controller
      * @param integer $id
      *
      * @return \yii\web\Response
-     * @throws ForbiddenHttpException
-     * @throws NotFoundHttpException
      * @throws \Exception
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
@@ -190,12 +191,15 @@ class SettingsController extends Controller
     {
         $account = UserSocialAccount::find()->byId($id)->one();
         if ($account === null) {
-            throw new NotFoundHttpException();
+            Yii::$app->session->setFlash('success', Yii::t('user', 'Your account have been updated.'));
+            return $this->redirect(['networks']);
         }
         if ($account->user_id != Yii::$app->user->id) {
-            throw new ForbiddenHttpException();
+            Yii::$app->session->setFlash('success', Yii::t('user', 'You do not have the right to dismiss this social account.'));
+            return $this->redirect(['networks']);
         }
         $account->delete();
+        Yii::$app->session->setFlash('success', Yii::t('user', 'Your account have been updated.'));
         return $this->redirect(['networks']);
     }
 }

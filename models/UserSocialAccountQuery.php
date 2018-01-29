@@ -41,6 +41,16 @@ class UserSocialAccountQuery extends ActiveQuery
     }
 
     /**
+     * Finds an account by provider.
+     * @param string $provider
+     * @return UserSocialAccountQuery
+     */
+    public function byProvider($provider)
+    {
+        return $this->andWhere(['provider' => $provider]);
+    }
+
+    /**
      * Finds an account by code.
      * @param string $code
      * @return UserSocialAccountQuery
@@ -77,6 +87,6 @@ class UserSocialAccountQuery extends ActiveQuery
      */
     public function byClient(BaseClientInterface $client)
     {
-        return $this->andWhere(['provider' => $client->getId(),'client_id' => $client->getUserAttributes()['id']]);
+        return $this->andWhere(['provider' => $client->getId(), 'client_id' => $client->getUserAttributes()['id']]);
     }
 }
