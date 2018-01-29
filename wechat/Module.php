@@ -28,6 +28,12 @@ class Module extends \yuncms\user\Module
 
     /** @var array The rules to be used in URL management. */
     public $urlRules = [
+        [
+            'class' => 'yii\web\UrlRule',
+            'suffix' => '.html',
+            'pattern' => '<action:(login|logout)>',
+            'route' => 'security/<action>',
+        ],
         'settings/<action:\w+>' => 'settings/<action>',
     ];
 }
