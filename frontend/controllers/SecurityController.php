@@ -43,7 +43,7 @@ class SecurityController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['login', 'auth', 'blocked'],
+                        'actions' => ['login', 'auth', 'wechat-auth', 'blocked'],
                         'roles' => ['?']
                     ],
                     [
@@ -66,6 +66,10 @@ class SecurityController extends Controller
                 'class' => AuthAction::className(),
                 // 如果用户未登录，将尝试登录，否则将尝试连接到用户的社交账户。
                 'successCallback' => Yii::$app->user->getIsGuest() ? [$this, 'authenticate'] : [$this, 'connect']
+            ],
+            'wechat-auth' => [
+                'class' => \xutl\wechat\oauth\AuthAction::className(),
+                'successCallback' => [$this, 'authenticate']
             ]
         ];
     }
@@ -82,6 +86,9 @@ class SecurityController extends Controller
         }
         if (Yii::$app->request->isGet) {
             Yii::$app->user->setReturnUrl(Yii::$app->request->getReferrer());
+        }
+        if (strpos(Yii::$app->request->userAgent, 'MicroMessenger') !== false) {
+            return $this->redirect(['wechat-auth']);
         }
 
         /**
