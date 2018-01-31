@@ -46,6 +46,11 @@ class Bootstrap implements BootstrapInterface
             });
 
             if ($module instanceof WeChatModule || $module instanceof FrontendModule) {
+                Yii::$container->set('yii\web\User', [
+                    'enableAutoLogin' => true,
+                    'loginUrl' => ['/user/security/login'],
+                    'identityClass' => 'yuncms\user\models\User',
+                ]);
                 $configUrlRule = ['prefix' => $module->urlPrefix, 'rules' => $module->urlRules,];
                 if ($module->urlPrefix != 'user') {
                     $configUrlRule['routePrefix'] = 'user';
@@ -57,11 +62,6 @@ class Bootstrap implements BootstrapInterface
                     //记录最后登录时间记录最后登录IP记录登录次数
                     Yii::$app->queue->push(new ResetLoginDataJob(['user_id' => $app->user->identity->getId(), 'ip' => Yii::$app->request->userIP]));
                 });
-                Yii::$container->set('yii\web\User', [
-                    'enableAutoLogin' => true,
-                    'loginUrl' => ['/user/security/login'],
-                    'identityClass' => 'yuncms\user\models\User',
-                ]);
                 //设置用户所在时区
 //                $app->on(\yii\web\Application::EVENT_BEFORE_REQUEST, function ($event) use ($app) {
 //                    if (!$app->user->isGuest && $app->user->identity->profile->timezone) {

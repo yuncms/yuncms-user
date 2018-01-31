@@ -4,9 +4,6 @@ namespace yuncms\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
-use yii\behaviors\TimestampBehavior;
-use yii\behaviors\BlameableBehavior;
 use yii\helpers\Url;
 use yuncms\user\UserTrait;
 
