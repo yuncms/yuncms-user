@@ -87,7 +87,7 @@ class SecurityController extends Controller
         if (Yii::$app->request->isGet) {
             Yii::$app->user->setReturnUrl(Yii::$app->request->getReferrer());
         }
-        if (strpos(Yii::$app->request->userAgent, 'MicroMessenger') !== false) {
+        if (Yii::$app->has('wechat') && strpos(Yii::$app->request->userAgent, 'MicroMessenger') !== false) {
             return $this->redirect(['wechat-auth']);
         }
 
