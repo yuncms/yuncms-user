@@ -12,6 +12,7 @@ use yii\base\Model;
 use yuncms\core\helpers\PasswordHelper;
 use yuncms\user\jobs\LoginHistoryJob;
 use yuncms\user\models\User;
+use yuncms\user\notifications\UserNotification;
 use yuncms\user\UserTrait;
 
 /**
@@ -97,6 +98,7 @@ class LoginForm extends Model
     {
         if ($this->validate()) {
             Yii::$app->queue->push(new LoginHistoryJob(['user_id' => $this->user->getId(), 'ip' => Yii::$app->request->userIP]));
+            UserNotification::create(UserNotification::CATEGORY_USER_LOGIN, ['user' => $this->user])->send();
             return Yii::$app->user->login($this->user, $this->rememberMe ? $this->getSetting('rememberFor') : 0);
         } else {
             return false;
