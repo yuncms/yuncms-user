@@ -71,7 +71,7 @@ class UserNotification extends Notification
     {
         switch ($this->action) {
             case self::CATEGORY_USER_LOGIN:
-                $subject = 'Your account successfully landed ' . Yii::$app->name;
+                $subject = 'Your account successfully landed. ';
                 $template = 'user/landed';
                 break;
         }
@@ -83,7 +83,7 @@ class UserNotification extends Notification
         Yii::configure($message, $channel->message);
 
         $message->setTo($this->user->email);
-        $message->setSubject($subject);
+        $message->setSubject('[' . Yii::$app->name . ']' . $subject);
         $message->send($channel->mailer);
     }
 }
