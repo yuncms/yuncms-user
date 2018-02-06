@@ -38,11 +38,11 @@ class UserNotification extends Notification
     public function shouldSend($channel)
     {
         if ($channel->id == 'screen') {//WEB桌面通知
-            if (!in_array($this->category, [self::CATEGORY_USER_LOGIN])) {//不是授权的分类，直接干掉
+            if (!in_array($this->action, [self::CATEGORY_USER_LOGIN])) {//不是授权的分类，直接干掉
                 return false;
             }
 
-            if ($this->category == self::CATEGORY_USER_LOGIN) {//登录提醒不发送给WEB桌面
+            if ($this->action == self::CATEGORY_USER_LOGIN) {//登录提醒不发送给WEB桌面
                 return false;
             }
         }
@@ -55,7 +55,7 @@ class UserNotification extends Notification
      */
     public function getTitle()
     {
-        switch ($this->category) {
+        switch ($this->action) {
             case self::CATEGORY_USER_LOGIN:
                 return Yii::t('user', 'Your account successfully landed.');
         }
@@ -69,7 +69,7 @@ class UserNotification extends Notification
      */
     public function toEmail($channel)
     {
-        switch ($this->category) {
+        switch ($this->action) {
             case self::CATEGORY_USER_LOGIN:
                 $subject = 'Your account successfully landed ' . Yii::$app->name;
                 $template = 'user/landed';
