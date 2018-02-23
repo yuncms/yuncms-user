@@ -85,7 +85,7 @@ class ConnectForm extends Model
             if ($this->user === null) {
                 /** @var \yuncms\user\models\User $user */
                 $this->user = Yii::createObject([
-                    'class' => User::className(),
+                    'class' => User::class,
                     'scenario' => User::SCENARIO_CONNECT,
                     'nickname' => $this->socialAccount->username,
                 ]);

@@ -25,6 +25,7 @@ class M171113071828Create_user_table extends Migration
             'password_hash' => $this->string(100)->notNull()->comment('Password Hash'),
             'access_token' => $this->string(100)->notNull()->comment('Access Token'),
             'avatar' => $this->boolean()->defaultValue(false)->comment('Avatar'),
+            'type' => $this->smallInteger(1)->comment('User Type'),
             'unconfirmed_email' => $this->string(150)->comment('Unconfirmed Email'),
             'unconfirmed_mobile' => $this->string(11)->comment('Unconfirmed Mobile'),
             'registration_ip' => $this->string()->comment('Registration Ip'),

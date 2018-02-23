@@ -248,7 +248,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function getExtra()
     {
-        return $this->hasOne(UserExtra::className(), ['user_id' => 'id']);
+        return $this->hasOne(UserExtra::class, ['user_id' => 'id']);
     }
 
     /**
@@ -256,7 +256,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function getLoginHistories()
     {
-        return $this->hasMany(UserLoginHistory::className(), ['user_id' => 'id']);
+        return $this->hasMany(UserLoginHistory::class, ['user_id' => 'id']);
     }
 
     /**
@@ -264,7 +264,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function getProfile()
     {
-        return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
+        return $this->hasOne(UserProfile::class, ['user_id' => 'id']);
     }
 
     /**
@@ -275,7 +275,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
     {
         $connected = [];
         /** @var UserSocialAccount[] $accounts */
-        $accounts = $this->hasMany(UserSocialAccount::className(), ['user_id' => 'id'])->all();
+        $accounts = $this->hasMany(UserSocialAccount::class, ['user_id' => 'id'])->all();
         /**
          * @var UserSocialAccount $account
          */
@@ -291,7 +291,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function getTags()
     {
-        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('{{%user_tag}}', ['user_id' => 'id']);
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])->viaTable('{{%user_tag}}', ['user_id' => 'id']);
     }
 
     /**
@@ -299,7 +299,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function getTokens()
     {
-        return $this->hasMany(UserToken::className(), ['user_id' => 'id']);
+        return $this->hasMany(UserToken::class, ['user_id' => 'id']);
     }
 
     /**

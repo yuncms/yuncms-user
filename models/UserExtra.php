@@ -66,7 +66,7 @@ class UserExtra extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**
@@ -74,7 +74,7 @@ class UserExtra extends ActiveRecord
      */
     public function getProfile()
     {
-        return $this->hasOne(UserProfile::className(), ['user_id' => 'user_id']);
+        return $this->hasOne(UserProfile::class, ['user_id' => 'user_id']);
     }
 
     /**

@@ -54,7 +54,7 @@ class UserSocialAccount extends ActiveRecord
     {
         $behaviors = parent::behaviors();
         $behaviors['timestamp'] = [
-            'class' => TimestampBehavior::className(),
+            'class' => TimestampBehavior::class,
             'attributes' => [
                 ActiveRecord::EVENT_BEFORE_INSERT => ['created_at']
             ],
