@@ -12,6 +12,8 @@ use yii\web\Application as WebApplication;
 use yii\web\IdentityInterface;
 use yii\filters\RateLimitInterface;
 use yuncms\core\helpers\PasswordHelper;
+use yuncms\notifications\contracts\NotifiableInterface;
+use yuncms\notifications\NotifiableTrait;
 use yuncms\oauth2\OAuth2IdentityInterface;
 use yuncms\tag\models\Tag;
 use yuncms\user\frontend\assets\UserAsset;
@@ -62,9 +64,10 @@ use yuncms\user\UserTrait;
  * @property UserToken[] $userTokens
  *
  */
-class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInterface, RateLimitInterface
+class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInterface, RateLimitInterface, NotifiableInterface
 {
     use UserTrait;
+    use NotifiableTrait;
 
     //事件定义
     const BEFORE_CREATE = 'beforeCreate';
@@ -824,5 +827,46 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
     {
         Yii::$app->cache->set($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance', $allowance, 60);
         Yii::$app->cache->set($action->controller->id . ':' . $action->id . ':' . $this->id . '_allowance_update_at', $timestamp, 60);
+    }
+
+    //////// NotifiableInterface /////////
+    ///
+    /**
+     * 默认通过电子邮件发送通知
+     * @return array
+     */
+    public function viaChannels()
+    {
+        return ['mail', 'sms'];
+    }
+
+    /**
+     * 获取给定通道的通知路由信息。
+     * @return mixed
+     */
+    public function routeNotificationForMail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * 获取给定通道的通知路由信息。
+     * @return mixed
+     */
+    public function routeNotificationForSms()
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * 获取给定通道的通知路由信息。
+     * @return mixed
+     */
+    public function routeNotificationForApp()
+    {
+        return [
+            'target' => 'ACCOUNT',
+            'targetValue' => $this->id,
+        ];
     }
 }
