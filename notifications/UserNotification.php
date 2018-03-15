@@ -8,10 +8,9 @@
 namespace yuncms\user\notifications;
 
 use Yii;
-use yuncms\notification\Channel;
+use yuncms\notification\NotificationTrait;
+use yuncms\notifications\contracts\NotificationInterface;
 use yuncms\user\models\User;
-use yuncms\notification\Notification;
-use yuncms\notification\channels\EmailChannel;
 
 /**
  * Class UserNotification
@@ -20,70 +19,50 @@ use yuncms\notification\channels\EmailChannel;
  * @author Tongle Xu <xutongle@gmail.com>
  * @since 1.0
  */
-class UserNotification extends Notification
+class UserNotification implements NotificationInterface
 {
 
-    const CATEGORY_USER_LOGIN = 'user_login';
+    use NotificationTrait;
 
     /**
-     * @var User
+     * @return object|\yuncms\notifications\messages\MailMessage
+     * @throws \yii\base\InvalidConfigException
      */
-    public $user;
-
-    /**
-     * Get the notification's delivery channels.
-     * @param Channel $channel
-     * @return boolean
-     */
-    public function shouldSend($channel)
+    public function exportForMail()
     {
-        if ($channel->id == 'screen') {//WEB桌面通知
-            if (!in_array($this->action, [self::CATEGORY_USER_LOGIN])) {//不是授权的分类，直接干掉
-                return false;
-            }
-
-            if ($this->action == self::CATEGORY_USER_LOGIN) {//登录提醒不发送给WEB桌面
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getTitle()
-    {
-        switch ($this->action) {
-            case self::CATEGORY_USER_LOGIN:
-                return Yii::t('user', 'Your account successfully landed.');
-        }
-    }
-
-    /**
-     * Override send to email channel
-     *
-     * @param $channel EmailChannel the email channel
-     * @return void
-     */
-    public function toEmail($channel)
-    {
-        switch ($this->action) {
-            case self::CATEGORY_USER_LOGIN:
-                $subject = 'Your account successfully landed. ';
-                $template = 'user/landed';
-                break;
-        }
-
-        $message = $channel->mailer->compose($template, [
-            'user' => $this->user,
-            'notification' => $this,
+        return Yii::createObject([
+            'class' => \yuncms\notifications\messages\MailMessage::class,
+            'view' => ['html' => 'invoice-paid'],
+            'viewData' => [
+                'invoiceNumber' => 'test',
+                'amount' => 'test'
+            ]
         ]);
-        Yii::configure($message, $channel->message);
+    }
 
-        $message->setTo($this->user->email);
-        $message->setSubject('[' . Yii::$app->name . ']' . $subject);
-        $message->send($channel->mailer);
+    /**
+     * @return object|\yuncms\notifications\messages\AliyunCloudPushMessage
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function exportForJPush()
+    {
+        return Yii::createObject([
+            'class' => \yuncms\notifications\messages\JPushMessage::class,
+            'title' => 'test',
+            'body' => 'testst'
+        ]);
+    }
+
+    /**
+     * @return object|\yuncms\notifications\messages\AliyunCloudPushMessage
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function exportForAliyunCloudPush()
+    {
+        return Yii::createObject([
+            'class' => \yuncms\notifications\messages\AliyunCloudPushMessage::class,
+            'title' => 'test',
+            'body' => 'testst'
+        ]);
     }
 }
