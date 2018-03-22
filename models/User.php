@@ -837,7 +837,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      */
     public function viaChannels()
     {
-        return ['mail', 'sms'];
+        return ['mail', 'sms','aliyunCloudPush'];
     }
 
     /**
@@ -862,7 +862,7 @@ class User extends ActiveRecord implements IdentityInterface, OAuth2IdentityInte
      * 获取给定通道的通知路由信息。
      * @return mixed
      */
-    public function routeNotificationForApp()
+    public function routeNotificationForAliyunCloudPush()
     {
         return [
             'target' => 'ACCOUNT',
