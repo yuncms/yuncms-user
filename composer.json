@@ -40,13 +40,6 @@
         "class": "yii\\i18n\\PhpMessageSource",
         "sourceLanguage": "en-US",
         "basePath": "@yuncms/user/messages"
-      },
-      "migrationNamespace": "yuncms\\user\\migrations",
-      "backend": {
-        "class": "yuncms\\user\\backend\\Module"
-      },
-      "frontend": {
-        "class": "yuncms\\user\\frontend\\Module"
       }
     },
     "bootstrap": "yuncms\\user\\Bootstrap",
