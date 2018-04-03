@@ -9,18 +9,7 @@
   "type": "yii2-extension",
   "license": "MIT",
   "require": {
-    "yiisoft/yii2": "~2.0.13",
-    "yiisoft/yii2-jui": "~2.0",
-    "yiisoft/yii2-swiftmailer": "~2.0",
-    "yiisoft/yii2-queue": "~2.0.1",
-    "yiisoft/yii2-bootstrap": "~2.0",
-    "yiisoft/yii2-imagine": "~2.1",
-    "yiilab/yii2-fontawesome-asset": "~1.0",
-    "xutl/yii2-cropper-asset": "~1.0",
-    "xutl/yii2-authclient": "~1.0",
-    "xutl/yii2-fmt-asset": "~1.0",
-    "xutl/yii2-wechat": "~2.0.0",
-    "yuncms/yuncms-tag": "~2.0"
+    "xutl/yii2-wechat": "~2.0.0"
   },
   "require-dev": {
     "codeception/base": "^2.2.3",
